@@ -20,7 +20,7 @@
         <elementListCompartment Id="9fb75aa6-2d2a-40b3-bef6-d11be3fee6e1" absoluteBounds="4.265, 4.085, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(4.25 : 4.1874995); (2.375 : 4.1874995); (2.375 : 4.75)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(4.25 : 4.1874995); (3.17708333333333 : 4.1874995 : JumpStart); (3.01041666666667 : 4.1874995 : JumpEnd); (2.375 : 4.1874995); (2.375 : 4.75)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataPRIFDataContext/TYPE/TYPE_VEHICULE" />
       <nodes>
         <classShapeMoniker Id="a59a4b12-fde1-46da-bc04-c11b0aa88661" />
@@ -33,7 +33,7 @@
         <elementListCompartment Id="cb09a385-4471-46cd-b690-1b5867dd0b51" absoluteBounds="4.265, 5.585, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(4.25 : 5.72199625651042); (3.375 : 5.72199625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(4.25 : 5.72199625651042); (3.375 : 5.72199625651042)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataPRIFDataContext/COULEUR/COULEUR_VEHICULE" />
       <nodes>
         <classShapeMoniker Id="5e8cd32e-75d3-431a-9109-a5b6b241a05a" />
@@ -46,7 +46,7 @@
         <elementListCompartment Id="38151116-a7c3-4596-a6c6-214586922baa" absoluteBounds="4.39, 7.085, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(4.375 : 7.22199625651042); (2.375 : 7.22199625651042); (2.375 : 6.52089680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(4.375 : 7.22199625651042); (2.375 : 7.22199625651042); (2.375 : 6.52089680989583)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataPRIFDataContext/MODELE/MODELE_VEHICULE" />
       <nodes>
         <classShapeMoniker Id="7f6fdf3d-bf9f-4140-aebb-294be74049b6" />
@@ -59,5 +59,32 @@
         <elementListCompartment Id="731fbb76-5c80-4c01-9cc6-4e46dad49f4f" absoluteBounds="3.7649999999999997, 1.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="11a478c4-a202-4d37-b3d5-88570d654671" absoluteBounds="6.5, 1.125, 2, 2.9247054036458331">
+      <DataClassMoniker Name="/DataPRIFDataContext/LOCATION" />
+      <nestedChildShapes>
+        <elementListCompartment Id="737e147b-89c5-4f30-a512-d764786a1879" absoluteBounds="6.515, 1.585, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 3.02809895833333); (6.5 : 3.02809895833333)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataPRIFDataContext/CLIENT/CLIENT_LOCATION" />
+      <nodes>
+        <classShapeMoniker Id="a4309b35-edfa-4ba3-b126-2ebf69c94a5d" />
+        <classShapeMoniker Id="11a478c4-a202-4d37-b3d5-88570d654671" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.75 : 1.94794840494792); (6.5 : 1.94794840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataPRIFDataContext/TERME/TERME_LOCATION" />
+      <nodes>
+        <classShapeMoniker Id="c1dbd251-c88c-48a6-9310-6a3227a1d937" />
+        <classShapeMoniker Id="11a478c4-a202-4d37-b3d5-88570d654671" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(3.09375 : 4.75); (3.09375 : 3.42390055338542); (6.5 : 3.42390055338542)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataPRIFDataContext/VEHICULE/VEHICULE_LOCATION" />
+      <nodes>
+        <classShapeMoniker Id="125617b1-9ee9-40d4-9800-cc5849a37438" />
+        <classShapeMoniker Id="11a478c4-a202-4d37-b3d5-88570d654671" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

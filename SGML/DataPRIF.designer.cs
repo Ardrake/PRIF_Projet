@@ -48,6 +48,9 @@ namespace SGML
     partial void InsertTERME(TERME instance);
     partial void UpdateTERME(TERME instance);
     partial void DeleteTERME(TERME instance);
+    partial void InsertLOCATION(LOCATION instance);
+    partial void UpdateLOCATION(LOCATION instance);
+    partial void DeleteLOCATION(LOCATION instance);
     #endregion
 		
 		public DataPRIFDataContext() : 
@@ -128,6 +131,14 @@ namespace SGML
 			}
 		}
 		
+		public System.Data.Linq.Table<LOCATION> LOCATIONs
+		{
+			get
+			{
+				return this.GetTable<LOCATION>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SELECT_ALL_VEHICULE")]
 		public ISingleResult<SELECT_ALL_VEHICULEResult> SELECT_ALL_VEHICULE()
 		{
@@ -165,6 +176,8 @@ namespace SGML
 		
 		private string _TELEPHONE;
 		
+		private EntitySet<LOCATION> _LOCATIONs;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -189,6 +202,7 @@ namespace SGML
 		
 		public CLIENT()
 		{
+			this._LOCATIONs = new EntitySet<LOCATION>(new Action<LOCATION>(this.attach_LOCATIONs), new Action<LOCATION>(this.detach_LOCATIONs));
 			OnCreated();
 		}
 		
@@ -352,6 +366,19 @@ namespace SGML
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CLIENT_LOCATION", Storage="_LOCATIONs", ThisKey="IDCLIENT", OtherKey="IDCLIENT")]
+		public EntitySet<LOCATION> LOCATIONs
+		{
+			get
+			{
+				return this._LOCATIONs;
+			}
+			set
+			{
+				this._LOCATIONs.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -371,6 +398,18 @@ namespace SGML
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
+		
+		private void attach_LOCATIONs(LOCATION entity)
+		{
+			this.SendPropertyChanging();
+			entity.CLIENT = this;
+		}
+		
+		private void detach_LOCATIONs(LOCATION entity)
+		{
+			this.SendPropertyChanging();
+			entity.CLIENT = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.VEHICULES")]
@@ -388,6 +427,8 @@ namespace SGML
 		private int _TYPE;
 		
 		private int _COULEUR;
+		
+		private EntitySet<LOCATION> _LOCATIONs;
 		
 		private EntityRef<TYPE> _TYPE1;
 		
@@ -413,6 +454,7 @@ namespace SGML
 		
 		public VEHICULE()
 		{
+			this._LOCATIONs = new EntitySet<LOCATION>(new Action<LOCATION>(this.attach_LOCATIONs), new Action<LOCATION>(this.detach_LOCATIONs));
 			this._TYPE1 = default(EntityRef<TYPE>);
 			this._COULEUR1 = default(EntityRef<COULEUR>);
 			this._MODELE1 = default(EntityRef<MODELE>);
@@ -528,6 +570,19 @@ namespace SGML
 					this.SendPropertyChanged("COULEUR");
 					this.OnCOULEURChanged();
 				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="VEHICULE_LOCATION", Storage="_LOCATIONs", ThisKey="NIV", OtherKey="NIV")]
+		public EntitySet<LOCATION> LOCATIONs
+		{
+			get
+			{
+				return this._LOCATIONs;
+			}
+			set
+			{
+				this._LOCATIONs.Assign(value);
 			}
 		}
 		
@@ -651,6 +706,18 @@ namespace SGML
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_LOCATIONs(LOCATION entity)
+		{
+			this.SendPropertyChanging();
+			entity.VEHICULE = this;
+		}
+		
+		private void detach_LOCATIONs(LOCATION entity)
+		{
+			this.SendPropertyChanging();
+			entity.VEHICULE = null;
 		}
 	}
 	
@@ -1012,6 +1079,8 @@ namespace SGML
 		
 		private System.Nullable<decimal> _PRIMEKM;
 		
+		private EntitySet<LOCATION> _LOCATIONs;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1030,6 +1099,7 @@ namespace SGML
 		
 		public TERME()
 		{
+			this._LOCATIONs = new EntitySet<LOCATION>(new Action<LOCATION>(this.attach_LOCATIONs), new Action<LOCATION>(this.detach_LOCATIONs));
 			OnCreated();
 		}
 		
@@ -1129,6 +1199,456 @@ namespace SGML
 					this._PRIMEKM = value;
 					this.SendPropertyChanged("PRIMEKM");
 					this.OnPRIMEKMChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TERME_LOCATION", Storage="_LOCATIONs", ThisKey="ID", OtherKey="TERME")]
+		public EntitySet<LOCATION> LOCATIONs
+		{
+			get
+			{
+				return this._LOCATIONs;
+			}
+			set
+			{
+				this._LOCATIONs.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_LOCATIONs(LOCATION entity)
+		{
+			this.SendPropertyChanging();
+			entity.TERME1 = this;
+		}
+		
+		private void detach_LOCATIONs(LOCATION entity)
+		{
+			this.SendPropertyChanging();
+			entity.TERME1 = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LOCATIONS")]
+	public partial class LOCATION : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Nullable<System.DateTime> _DATEDEBUT;
+		
+		private System.Nullable<System.DateTime> _DATEPAIEMENT;
+		
+		private System.Nullable<decimal> _MONTANT;
+		
+		private System.Nullable<int> _NBRPAIEMENT;
+		
+		private string _NIV;
+		
+		private int _TERME;
+		
+		private int _IDCLIENT;
+		
+		private System.Nullable<int> _KM_DEBUT;
+		
+		private System.Nullable<int> _KM_FIN;
+		
+		private System.Nullable<decimal> _VALEUR;
+		
+		private System.Nullable<bool> _USAGE;
+		
+		private EntityRef<CLIENT> _CLIENT;
+		
+		private EntityRef<TERME> _TERME1;
+		
+		private EntityRef<VEHICULE> _VEHICULE;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDATEDEBUTChanging(System.Nullable<System.DateTime> value);
+    partial void OnDATEDEBUTChanged();
+    partial void OnDATEPAIEMENTChanging(System.Nullable<System.DateTime> value);
+    partial void OnDATEPAIEMENTChanged();
+    partial void OnMONTANTChanging(System.Nullable<decimal> value);
+    partial void OnMONTANTChanged();
+    partial void OnNBRPAIEMENTChanging(System.Nullable<int> value);
+    partial void OnNBRPAIEMENTChanged();
+    partial void OnNIVChanging(string value);
+    partial void OnNIVChanged();
+    partial void OnTERMEChanging(int value);
+    partial void OnTERMEChanged();
+    partial void OnIDCLIENTChanging(int value);
+    partial void OnIDCLIENTChanged();
+    partial void OnKM_DEBUTChanging(System.Nullable<int> value);
+    partial void OnKM_DEBUTChanged();
+    partial void OnKM_FINChanging(System.Nullable<int> value);
+    partial void OnKM_FINChanged();
+    partial void OnVALEURChanging(System.Nullable<decimal> value);
+    partial void OnVALEURChanged();
+    partial void OnUSAGEChanging(System.Nullable<bool> value);
+    partial void OnUSAGEChanged();
+    #endregion
+		
+		public LOCATION()
+		{
+			this._CLIENT = default(EntityRef<CLIENT>);
+			this._TERME1 = default(EntityRef<TERME>);
+			this._VEHICULE = default(EntityRef<VEHICULE>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DATEDEBUT", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DATEDEBUT
+		{
+			get
+			{
+				return this._DATEDEBUT;
+			}
+			set
+			{
+				if ((this._DATEDEBUT != value))
+				{
+					this.OnDATEDEBUTChanging(value);
+					this.SendPropertyChanging();
+					this._DATEDEBUT = value;
+					this.SendPropertyChanged("DATEDEBUT");
+					this.OnDATEDEBUTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DATEPAIEMENT", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DATEPAIEMENT
+		{
+			get
+			{
+				return this._DATEPAIEMENT;
+			}
+			set
+			{
+				if ((this._DATEPAIEMENT != value))
+				{
+					this.OnDATEPAIEMENTChanging(value);
+					this.SendPropertyChanging();
+					this._DATEPAIEMENT = value;
+					this.SendPropertyChanged("DATEPAIEMENT");
+					this.OnDATEPAIEMENTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MONTANT", DbType="Money")]
+		public System.Nullable<decimal> MONTANT
+		{
+			get
+			{
+				return this._MONTANT;
+			}
+			set
+			{
+				if ((this._MONTANT != value))
+				{
+					this.OnMONTANTChanging(value);
+					this.SendPropertyChanging();
+					this._MONTANT = value;
+					this.SendPropertyChanged("MONTANT");
+					this.OnMONTANTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NBRPAIEMENT", DbType="Int")]
+		public System.Nullable<int> NBRPAIEMENT
+		{
+			get
+			{
+				return this._NBRPAIEMENT;
+			}
+			set
+			{
+				if ((this._NBRPAIEMENT != value))
+				{
+					this.OnNBRPAIEMENTChanging(value);
+					this.SendPropertyChanging();
+					this._NBRPAIEMENT = value;
+					this.SendPropertyChanged("NBRPAIEMENT");
+					this.OnNBRPAIEMENTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NIV", DbType="NVarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string NIV
+		{
+			get
+			{
+				return this._NIV;
+			}
+			set
+			{
+				if ((this._NIV != value))
+				{
+					if (this._VEHICULE.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnNIVChanging(value);
+					this.SendPropertyChanging();
+					this._NIV = value;
+					this.SendPropertyChanged("NIV");
+					this.OnNIVChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TERME", DbType="Int NOT NULL")]
+		public int TERME
+		{
+			get
+			{
+				return this._TERME;
+			}
+			set
+			{
+				if ((this._TERME != value))
+				{
+					if (this._TERME1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTERMEChanging(value);
+					this.SendPropertyChanging();
+					this._TERME = value;
+					this.SendPropertyChanged("TERME");
+					this.OnTERMEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IDCLIENT", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int IDCLIENT
+		{
+			get
+			{
+				return this._IDCLIENT;
+			}
+			set
+			{
+				if ((this._IDCLIENT != value))
+				{
+					if (this._CLIENT.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnIDCLIENTChanging(value);
+					this.SendPropertyChanging();
+					this._IDCLIENT = value;
+					this.SendPropertyChanged("IDCLIENT");
+					this.OnIDCLIENTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_KM_DEBUT", DbType="Int")]
+		public System.Nullable<int> KM_DEBUT
+		{
+			get
+			{
+				return this._KM_DEBUT;
+			}
+			set
+			{
+				if ((this._KM_DEBUT != value))
+				{
+					this.OnKM_DEBUTChanging(value);
+					this.SendPropertyChanging();
+					this._KM_DEBUT = value;
+					this.SendPropertyChanged("KM_DEBUT");
+					this.OnKM_DEBUTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_KM_FIN", DbType="Int")]
+		public System.Nullable<int> KM_FIN
+		{
+			get
+			{
+				return this._KM_FIN;
+			}
+			set
+			{
+				if ((this._KM_FIN != value))
+				{
+					this.OnKM_FINChanging(value);
+					this.SendPropertyChanging();
+					this._KM_FIN = value;
+					this.SendPropertyChanged("KM_FIN");
+					this.OnKM_FINChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VALEUR", DbType="Money")]
+		public System.Nullable<decimal> VALEUR
+		{
+			get
+			{
+				return this._VALEUR;
+			}
+			set
+			{
+				if ((this._VALEUR != value))
+				{
+					this.OnVALEURChanging(value);
+					this.SendPropertyChanging();
+					this._VALEUR = value;
+					this.SendPropertyChanged("VALEUR");
+					this.OnVALEURChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_USAGE", DbType="Bit")]
+		public System.Nullable<bool> USAGE
+		{
+			get
+			{
+				return this._USAGE;
+			}
+			set
+			{
+				if ((this._USAGE != value))
+				{
+					this.OnUSAGEChanging(value);
+					this.SendPropertyChanging();
+					this._USAGE = value;
+					this.SendPropertyChanged("USAGE");
+					this.OnUSAGEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CLIENT_LOCATION", Storage="_CLIENT", ThisKey="IDCLIENT", OtherKey="IDCLIENT", IsForeignKey=true)]
+		public CLIENT CLIENT
+		{
+			get
+			{
+				return this._CLIENT.Entity;
+			}
+			set
+			{
+				CLIENT previousValue = this._CLIENT.Entity;
+				if (((previousValue != value) 
+							|| (this._CLIENT.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CLIENT.Entity = null;
+						previousValue.LOCATIONs.Remove(this);
+					}
+					this._CLIENT.Entity = value;
+					if ((value != null))
+					{
+						value.LOCATIONs.Add(this);
+						this._IDCLIENT = value.IDCLIENT;
+					}
+					else
+					{
+						this._IDCLIENT = default(int);
+					}
+					this.SendPropertyChanged("CLIENT");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TERME_LOCATION", Storage="_TERME1", ThisKey="TERME", OtherKey="ID", IsForeignKey=true)]
+		public TERME TERME1
+		{
+			get
+			{
+				return this._TERME1.Entity;
+			}
+			set
+			{
+				TERME previousValue = this._TERME1.Entity;
+				if (((previousValue != value) 
+							|| (this._TERME1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TERME1.Entity = null;
+						previousValue.LOCATIONs.Remove(this);
+					}
+					this._TERME1.Entity = value;
+					if ((value != null))
+					{
+						value.LOCATIONs.Add(this);
+						this._TERME = value.ID;
+					}
+					else
+					{
+						this._TERME = default(int);
+					}
+					this.SendPropertyChanged("TERME1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="VEHICULE_LOCATION", Storage="_VEHICULE", ThisKey="NIV", OtherKey="NIV", IsForeignKey=true)]
+		public VEHICULE VEHICULE
+		{
+			get
+			{
+				return this._VEHICULE.Entity;
+			}
+			set
+			{
+				VEHICULE previousValue = this._VEHICULE.Entity;
+				if (((previousValue != value) 
+							|| (this._VEHICULE.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._VEHICULE.Entity = null;
+						previousValue.LOCATIONs.Remove(this);
+					}
+					this._VEHICULE.Entity = value;
+					if ((value != null))
+					{
+						value.LOCATIONs.Add(this);
+						this._NIV = value.NIV;
+					}
+					else
+					{
+						this._NIV = default(string);
+					}
+					this.SendPropertyChanged("VEHICULE");
 				}
 			}
 		}

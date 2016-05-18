@@ -108,7 +108,7 @@
 
         <Grid x:Name="GridNouvelleLocation" Grid.Column="1" Grid.Row="1" Visibility="Visible">
             <StackPanel>
-                <Label Style="{StaticResource styleTitre}" Content="Insertion d'un nouveau contrat de Location"/>
+                <Label Style="{StaticResource styleTitre}" Content="Gestion des contrats de location"/>
                 <Separator/>
                 <Label Style="{StaticResource styleEntete}" Content="Selectionnez le client : "/>
                 <StackPanel Orientation="Horizontal">
@@ -126,13 +126,13 @@
                     </ComboBox>
                 </StackPanel>
                 <Label Style="{StaticResource styleEntete}" Content="Selectionnez le vehicule, inscrire le kilometrage et la valeur actuel"/>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" x:Name="selectionVehiculesp">
                     <ComboBox Height="23" Name="PaiementListVehicule" Width="440" Margin="2" HorizontalAlignment="Left" 
                               IsEditable="False" DropDownClosed="PaiementListVehicule_DropDownClosed" />
                     <Label Content="Kilometrage actuel: "/>
-                    <TextBox x:Name="ActualKM" Width="100"/>
+                    <TextBox x:Name="ActualKM" Width="100" LostFocus="ActualKM_LostFocus" Text="0"/>
                     <Label Content="Valeur actuel $ : "/>
-                    <TextBox x:Name="ActualValeur" Width="100"/>
+                    <TextBox x:Name="ActualValeur" Width="100" LostFocus="ActualValeur_LostFocus" Text="0"/>
                 </StackPanel>
                 <Label Style="{StaticResource styleEntete}" Content="Selectionnez le terme de la location et Inscrire la mensualité"/>
                 <StackPanel Orientation="Horizontal">
@@ -149,7 +149,7 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Label Margin="20,0" Content="Montant du paiement :"/>
-                    <TextBox x:Name="montantPaiement" Width="100"/>
+                    <TextBox x:Name="montantPaiement" Width="100" LostFocus="montantPaiement_LostFocus"/>
                 </StackPanel>
                 <Label Style="{StaticResource styleEntete}" Content="Inscrire la date de contrat et du premier paiement"/>
                 <StackPanel Orientation="Horizontal">
@@ -159,7 +159,13 @@
                     <DatePicker x:Name="SelectedDatePremierPaiement" Width="100"/>
                 </StackPanel>
                 <Separator/>
-                <Button Content="Inséré Location" Margin="10,10" Width="150" HorizontalAlignment="Right" Click="insereLocationButton_Click"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Annulé" Margin="10,10" Width="150" HorizontalAlignment="Right" Click="Button_Click"/>
+                    <Button Content="Inséré Location" Margin="10,10" Width="150" HorizontalAlignment="Right" Click="insereLocationButton_Click"/>
+                </StackPanel>
+                <Label Style="{StaticResource styleTitre}" Content="Contrat de location"/>
+                <DataGrid x:Name="lesContratDeLocation" />
+                <Button Content="Modifier contrat" Margin="10,10" Width="150" HorizontalAlignment="Right" Click="ButtonModifierLocation"/>
             </StackPanel>
         </Grid>
     </Grid>

@@ -10,6 +10,7 @@
       <Column Name="PROVINCE" Type="System.String" DbType="NChar(2)" CanBeNull="true" />
       <Column Name="CODEPOSTAL" Type="System.String" DbType="NChar(6)" CanBeNull="true" />
       <Column Name="TELEPHONE" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Association Name="CLIENT_LOCATION" Member="LOCATIONs" ThisKey="IDCLIENT" OtherKey="IDCLIENT" Type="LOCATION" />
     </Type>
   </Table>
   <Table Name="dbo.VEHICULES" Member="VEHICULEs">
@@ -19,6 +20,7 @@
       <Column Name="ANNEE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TYPE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="COULEUR" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="VEHICULE_LOCATION" Member="LOCATIONs" ThisKey="NIV" OtherKey="NIV" Type="LOCATION" />
       <Association Name="TYPE_VEHICULE" Member="TYPE1" ThisKey="TYPE" OtherKey="ID" Type="TYPE" IsForeignKey="true" />
       <Association Name="COULEUR_VEHICULE" Member="COULEUR1" ThisKey="COULEUR" OtherKey="ID" Type="COULEUR" IsForeignKey="true" />
       <Association Name="MODELE_VEHICULE" Member="MODELE1" ThisKey="MODELE" OtherKey="ID" Type="MODELE" IsForeignKey="true" />
@@ -52,6 +54,25 @@
       <Column Name="NBRANNEE" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="NBRKM" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="PRIMEKM" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Association Name="TERME_LOCATION" Member="LOCATIONs" ThisKey="ID" OtherKey="TERME" Type="LOCATION" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LOCATIONS" Member="LOCATIONs">
+    <Type Name="LOCATION">
+      <Column Name="DATEDEBUT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DATEPAIEMENT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="MONTANT" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="NBRPAIEMENT" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NIV" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TERME" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IDCLIENT" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="KM_DEBUT" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="KM_FIN" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VALEUR" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="USAGE" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="CLIENT_LOCATION" Member="CLIENT" ThisKey="IDCLIENT" OtherKey="IDCLIENT" Type="CLIENT" IsForeignKey="true" />
+      <Association Name="TERME_LOCATION" Member="TERME1" ThisKey="TERME" OtherKey="ID" Type="TERME" IsForeignKey="true" />
+      <Association Name="VEHICULE_LOCATION" Member="VEHICULE" ThisKey="NIV" OtherKey="NIV" Type="VEHICULE" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.SELECT_ALL_VEHICULE" Method="SELECT_ALL_VEHICULE">
