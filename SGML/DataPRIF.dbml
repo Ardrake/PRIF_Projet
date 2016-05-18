@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ML645-05037" Class="DataPRIFDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=CABANONS00006V;Initial Catalog=ML645-05037;Integrated Security=True" SettingsObjectName="SGML.Properties.Settings" SettingsPropertyName="ML645_05037ConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.CLIENTS" Member="CLIENTs">
+    <Type Name="CLIENT">
+      <Column Name="IDCLIENT" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PRENOM" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="NOM" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ADDRESSE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="VILLE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PROVINCE" Type="System.String" DbType="NChar(2)" CanBeNull="true" />
+      <Column Name="CODEPOSTAL" Type="System.String" DbType="NChar(6)" CanBeNull="true" />
+      <Column Name="TELEPHONE" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VEHICULES" Member="VEHICULEs">
+    <Type Name="VEHICULE">
+      <Column Name="NIV" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MODELE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ANNEE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TYPE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="COULEUR" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="TYPE_VEHICULE" Member="TYPE1" ThisKey="TYPE" OtherKey="ID" Type="TYPE" IsForeignKey="true" />
+      <Association Name="COULEUR_VEHICULE" Member="COULEUR1" ThisKey="COULEUR" OtherKey="ID" Type="COULEUR" IsForeignKey="true" />
+      <Association Name="MODELE_VEHICULE" Member="MODELE1" ThisKey="MODELE" OtherKey="ID" Type="MODELE" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TYPES" Member="TYPEs">
+    <Type Name="TYPE">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TYPE" Member="TYPE1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="TYPE_VEHICULE" Member="VEHICULEs" ThisKey="ID" OtherKey="TYPE" Type="VEHICULE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.COULEURS" Member="COULEURs">
+    <Type Name="COULEUR">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="COULEUR" Member="COULEUR1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="COULEUR_VEHICULE" Member="VEHICULEs" ThisKey="ID" OtherKey="COULEUR" Type="VEHICULE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MODELES" Member="MODELEs">
+    <Type Name="MODELE">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MODELE" Member="MODELE1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="MODELE_VEHICULE" Member="VEHICULEs" ThisKey="ID" OtherKey="MODELE" Type="VEHICULE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TERMES" Member="TERMEs">
+    <Type Name="TERME">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TERME" Member="TERME1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="NBRANNEE" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NBRKM" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PRIMEKM" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.SELECT_ALL_VEHICULE" Method="SELECT_ALL_VEHICULE">
+    <ElementType Name="SELECT_ALL_VEHICULEResult">
+      <Column Name="NIV" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ANNEE" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MODELE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TYPE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="COULEUR" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.INSERE_LOCATIONS" Method="INSERE_LOCATIONS">
+    <Parameter Name="datedebut" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="datepaiement" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="montant" Type="System.Decimal" DbType="Money" />
+    <Parameter Name="nbrpaiement" Type="System.Int32" DbType="Int" />
+    <Parameter Name="niv" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="terme" Type="System.Int32" DbType="Int" />
+    <Parameter Name="idclient" Type="System.Int32" DbType="Int" />
+    <Parameter Name="km_debut" Type="System.Int32" DbType="Int" />
+    <Parameter Name="km_fin" Type="System.Int32" DbType="Int" />
+    <Parameter Name="valeur" Type="System.Decimal" DbType="Money" />
+    <Parameter Name="usage" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

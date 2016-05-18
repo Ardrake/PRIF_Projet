@@ -1,0 +1,836 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SGMLModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AUDITS">
+          <Key>
+            <PropertyRef Name="IDTRANSACTION" />
+          </Key>
+          <Property Name="IDTRANSACTION" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDLOCATION" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="IDCLIENT" Type="int" Nullable="false" />
+          <Property Name="DATE" Type="date" />
+          <Property Name="CHAMP" Type="nchar" MaxLength="50" />
+          <Property Name="MODIF" Type="bit" />
+          <Property Name="ANCVAL" Type="nvarchar" MaxLength="50" />
+          <Property Name="NOUVAL" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CLIENTS">
+          <Key>
+            <PropertyRef Name="IDCLIENT" />
+          </Key>
+          <Property Name="IDCLIENT" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRENOM" Type="nvarchar" MaxLength="50" />
+          <Property Name="NOM" Type="nvarchar" MaxLength="50" />
+          <Property Name="ADDRESSE" Type="nvarchar" MaxLength="50" />
+          <Property Name="VILLE" Type="nvarchar" MaxLength="50" />
+          <Property Name="PROVINCE" Type="nchar" MaxLength="2" />
+          <Property Name="CODEPOSTAL" Type="nchar" MaxLength="6" />
+          <Property Name="TELEPHONE" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="COULEURS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="COULEUR" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LOCATIONS">
+          <Key>
+            <PropertyRef Name="NIV" />
+            <PropertyRef Name="IDCLIENT" />
+          </Key>
+          <Property Name="DATEDEBUT" Type="date" />
+          <Property Name="DATEPAIEMENT" Type="date" />
+          <Property Name="MONTANT" Type="money" />
+          <Property Name="NBRPAIEMENT" Type="int" />
+          <Property Name="NIV" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TERME" Type="int" Nullable="false" />
+          <Property Name="IDCLIENT" Type="int" Nullable="false" />
+          <Property Name="KM_DEBUT" Type="int" />
+          <Property Name="KM_FIN" Type="int" />
+          <Property Name="VALEUR" Type="money" />
+          <Property Name="USAGE" Type="bit" />
+        </EntityType>
+        <EntityType Name="MODELES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="MODELE" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OPTIONS">
+          <Key>
+            <PropertyRef Name="NIV" />
+          </Key>
+          <Property Name="NIV" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TRANSMISSIONAUTO" Type="bit" />
+          <Property Name="CLIMATISATION" Type="bit" />
+          <Property Name="ANTIDEMARREUR" Type="bit" />
+        </EntityType>
+        <EntityType Name="PAIEMENTS">
+          <Key>
+            <PropertyRef Name="IDTRANSACTION" />
+          </Key>
+          <Property Name="IDTRANSACTION" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MONTANT" Type="money" />
+          <Property Name="ANNULER" Type="bit" Nullable="false" />
+          <Property Name="DATE" Type="date" />
+          <Property Name="NIV" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IDCLIENT" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TERMES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TERME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NBRANNEE" Type="int" />
+          <Property Name="NBRKM" Type="int" />
+          <Property Name="PRIMEKM" Type="money" />
+        </EntityType>
+        <EntityType Name="TYPES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TYPE" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VEHICULES">
+          <Key>
+            <PropertyRef Name="NIV" />
+          </Key>
+          <Property Name="NIV" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MODELE" Type="int" Nullable="false" />
+          <Property Name="ANNEE" Type="int" Nullable="false" />
+          <Property Name="TYPE" Type="int" Nullable="false" />
+          <Property Name="COULEUR" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ML645-05037.dbo.Etape3' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Etape3">
+          <Key>
+            <PropertyRef Name="TELEPHONE" />
+            <PropertyRef Name="NIV" />
+            <PropertyRef Name="MODELE" />
+            <PropertyRef Name="ANNEE" />
+          </Key>
+          <Property Name="NOM" Type="nvarchar" MaxLength="50" />
+          <Property Name="TELEPHONE" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="NIV" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MODELE" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ANNEE" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LOCATIONS_CLIENTS">
+          <End Role="CLIENTS" Type="Self.CLIENTS" Multiplicity="1" />
+          <End Role="LOCATIONS" Type="Self.LOCATIONS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTS">
+              <PropertyRef Name="IDCLIENT" />
+            </Principal>
+            <Dependent Role="LOCATIONS">
+              <PropertyRef Name="IDCLIENT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LOCATIONS_TERMES">
+          <End Role="TERMES" Type="Self.TERMES" Multiplicity="1" />
+          <End Role="LOCATIONS" Type="Self.LOCATIONS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TERMES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LOCATIONS">
+              <PropertyRef Name="TERME" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LOCATIONS_VEHICULES">
+          <End Role="VEHICULES" Type="Self.VEHICULES" Multiplicity="1" />
+          <End Role="LOCATIONS" Type="Self.LOCATIONS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VEHICULES">
+              <PropertyRef Name="NIV" />
+            </Principal>
+            <Dependent Role="LOCATIONS">
+              <PropertyRef Name="NIV" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OPTIONS_VEHICULES">
+          <End Role="VEHICULES" Type="Self.VEHICULES" Multiplicity="1" />
+          <End Role="OPTIONS" Type="Self.OPTIONS" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="VEHICULES">
+              <PropertyRef Name="NIV" />
+            </Principal>
+            <Dependent Role="OPTIONS">
+              <PropertyRef Name="NIV" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PAIEMENTS_CLIENTS">
+          <End Role="CLIENTS" Type="Self.CLIENTS" Multiplicity="1" />
+          <End Role="PAIEMENTS" Type="Self.PAIEMENTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTS">
+              <PropertyRef Name="IDCLIENT" />
+            </Principal>
+            <Dependent Role="PAIEMENTS">
+              <PropertyRef Name="IDCLIENT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PAIEMENTS_VEHICULES">
+          <End Role="VEHICULES" Type="Self.VEHICULES" Multiplicity="1" />
+          <End Role="PAIEMENTS" Type="Self.PAIEMENTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VEHICULES">
+              <PropertyRef Name="NIV" />
+            </Principal>
+            <Dependent Role="PAIEMENTS">
+              <PropertyRef Name="NIV" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VEHICULES_COULEURS">
+          <End Role="COULEURS" Type="Self.COULEURS" Multiplicity="1" />
+          <End Role="VEHICULES" Type="Self.VEHICULES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COULEURS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VEHICULES">
+              <PropertyRef Name="COULEUR" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VEHICULES_MODELES">
+          <End Role="MODELES" Type="Self.MODELES" Multiplicity="1" />
+          <End Role="VEHICULES" Type="Self.VEHICULES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MODELES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VEHICULES">
+              <PropertyRef Name="MODELE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VEHICULES_TYPES">
+          <End Role="TYPES" Type="Self.TYPES" Multiplicity="1" />
+          <End Role="VEHICULES" Type="Self.VEHICULES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VEHICULES">
+              <PropertyRef Name="TYPE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="INSERE_LOCATIONS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="datedebut" Type="datetime" Mode="In" />
+          <Parameter Name="datepaiement" Type="datetime" Mode="In" />
+          <Parameter Name="montant" Type="money" Mode="In" />
+          <Parameter Name="nbrpaiement" Type="int" Mode="In" />
+          <Parameter Name="niv" Type="nvarchar" Mode="In" />
+          <Parameter Name="terme" Type="int" Mode="In" />
+          <Parameter Name="idclient" Type="int" Mode="In" />
+          <Parameter Name="km_debut" Type="int" Mode="In" />
+          <Parameter Name="km_fin" Type="int" Mode="In" />
+          <Parameter Name="valeur" Type="money" Mode="In" />
+          <Parameter Name="usage" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="INSERE_PAIEMENT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="montant" Type="money" Mode="In" />
+          <Parameter Name="niv" Type="varchar" Mode="In" />
+          <Parameter Name="idclient" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SELECT_LOCATION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="niv" Type="varchar" Mode="In" />
+          <Parameter Name="idclient" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SUPPRIME_CLIENT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idclient" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UPDATE_MONTANT_LOCATION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="niv" Type="varchar" Mode="In" />
+          <Parameter Name="idclient" Type="int" Mode="In" />
+          <Parameter Name="montant" Type="money" Mode="In" />
+        </Function>
+        <EntityContainer Name="SGMLModelStoreContainer">
+          <EntitySet Name="AUDITS" EntityType="Self.AUDITS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CLIENTS" EntityType="Self.CLIENTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="COULEURS" EntityType="Self.COULEURS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOCATIONS" EntityType="Self.LOCATIONS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MODELES" EntityType="Self.MODELES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OPTIONS" EntityType="Self.OPTIONS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PAIEMENTS" EntityType="Self.PAIEMENTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TERMES" EntityType="Self.TERMES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TYPES" EntityType="Self.TYPES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VEHICULES" EntityType="Self.VEHICULES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Etape3" EntityType="Self.Etape3" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Etape3].[NOM] AS [NOM], 
+    [Etape3].[TELEPHONE] AS [TELEPHONE], 
+    [Etape3].[NIV] AS [NIV], 
+    [Etape3].[MODELE] AS [MODELE], 
+    [Etape3].[ANNEE] AS [ANNEE]
+    FROM [dbo].[Etape3] AS [Etape3]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_LOCATIONS_CLIENTS" Association="Self.FK_LOCATIONS_CLIENTS">
+            <End Role="CLIENTS" EntitySet="CLIENTS" />
+            <End Role="LOCATIONS" EntitySet="LOCATIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LOCATIONS_TERMES" Association="Self.FK_LOCATIONS_TERMES">
+            <End Role="TERMES" EntitySet="TERMES" />
+            <End Role="LOCATIONS" EntitySet="LOCATIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LOCATIONS_VEHICULES" Association="Self.FK_LOCATIONS_VEHICULES">
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+            <End Role="LOCATIONS" EntitySet="LOCATIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OPTIONS_VEHICULES" Association="Self.FK_OPTIONS_VEHICULES">
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+            <End Role="OPTIONS" EntitySet="OPTIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAIEMENTS_CLIENTS" Association="Self.FK_PAIEMENTS_CLIENTS">
+            <End Role="CLIENTS" EntitySet="CLIENTS" />
+            <End Role="PAIEMENTS" EntitySet="PAIEMENTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAIEMENTS_VEHICULES" Association="Self.FK_PAIEMENTS_VEHICULES">
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+            <End Role="PAIEMENTS" EntitySet="PAIEMENTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VEHICULES_COULEURS" Association="Self.FK_VEHICULES_COULEURS">
+            <End Role="COULEURS" EntitySet="COULEURS" />
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VEHICULES_MODELES" Association="Self.FK_VEHICULES_MODELES">
+            <End Role="MODELES" EntitySet="MODELES" />
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VEHICULES_TYPES" Association="Self.FK_VEHICULES_TYPES">
+            <End Role="TYPES" EntitySet="TYPES" />
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SGMLModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AUDIT">
+          <Key>
+            <PropertyRef Name="IDTRANSACTION" />
+          </Key>
+          <Property Name="IDTRANSACTION" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDLOCATION" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IDCLIENT" Type="Int32" Nullable="false" />
+          <Property Name="DATE" Type="DateTime" Precision="0" />
+          <Property Name="CHAMP" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="MODIF" Type="Boolean" />
+          <Property Name="ANCVAL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NOUVAL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CLIENT">
+          <Key>
+            <PropertyRef Name="IDCLIENT" />
+          </Key>
+          <Property Name="IDCLIENT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRENOM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NOM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ADDRESSE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VILLE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PROVINCE" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="CODEPOSTAL" Type="String" MaxLength="6" FixedLength="true" Unicode="true" />
+          <Property Name="TELEPHONE" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="LOCATIONS" Relationship="Self.FK_LOCATIONS_CLIENTS" FromRole="CLIENTS" ToRole="LOCATIONS" />
+          <NavigationProperty Name="PAIEMENTS" Relationship="Self.FK_PAIEMENTS_CLIENTS" FromRole="CLIENTS" ToRole="PAIEMENTS" />
+        </EntityType>
+        <EntityType Name="COULEUR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="COULEUR1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="VEHICULES" Relationship="Self.FK_VEHICULES_COULEURS" FromRole="COULEURS" ToRole="VEHICULES" />
+        </EntityType>
+        <EntityType Name="LOCATION">
+          <Key>
+            <PropertyRef Name="NIV" />
+            <PropertyRef Name="IDCLIENT" />
+          </Key>
+          <Property Name="DATEDEBUT" Type="DateTime" Precision="0" />
+          <Property Name="DATEPAIEMENT" Type="DateTime" Precision="0" />
+          <Property Name="MONTANT" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="NBRPAIEMENT" Type="Int32" />
+          <Property Name="NIV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TERME" Type="Int32" Nullable="false" />
+          <Property Name="IDCLIENT" Type="Int32" Nullable="false" />
+          <Property Name="KM_DEBUT" Type="Int32" />
+          <Property Name="KM_FIN" Type="Int32" />
+          <Property Name="VALEUR" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="USAGE" Type="Boolean" />
+          <NavigationProperty Name="CLIENT" Relationship="Self.FK_LOCATIONS_CLIENTS" FromRole="LOCATIONS" ToRole="CLIENTS" />
+          <NavigationProperty Name="TERME1" Relationship="Self.FK_LOCATIONS_TERMES" FromRole="LOCATIONS" ToRole="TERMES" />
+          <NavigationProperty Name="VEHICULE" Relationship="Self.FK_LOCATIONS_VEHICULES" FromRole="LOCATIONS" ToRole="VEHICULES" />
+        </EntityType>
+        <EntityType Name="MODELE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="MODELE1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="VEHICULES" Relationship="Self.FK_VEHICULES_MODELES" FromRole="MODELES" ToRole="VEHICULES" />
+        </EntityType>
+        <EntityType Name="OPTION">
+          <Key>
+            <PropertyRef Name="NIV" />
+          </Key>
+          <Property Name="NIV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TRANSMISSIONAUTO" Type="Boolean" />
+          <Property Name="CLIMATISATION" Type="Boolean" />
+          <Property Name="ANTIDEMARREUR" Type="Boolean" />
+          <NavigationProperty Name="VEHICULE" Relationship="Self.FK_OPTIONS_VEHICULES" FromRole="OPTIONS" ToRole="VEHICULES" />
+        </EntityType>
+        <EntityType Name="PAIEMENT">
+          <Key>
+            <PropertyRef Name="IDTRANSACTION" />
+          </Key>
+          <Property Name="IDTRANSACTION" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MONTANT" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ANNULER" Type="Boolean" Nullable="false" />
+          <Property Name="DATE" Type="DateTime" Precision="0" />
+          <Property Name="NIV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IDCLIENT" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CLIENT" Relationship="Self.FK_PAIEMENTS_CLIENTS" FromRole="PAIEMENTS" ToRole="CLIENTS" />
+          <NavigationProperty Name="VEHICULE" Relationship="Self.FK_PAIEMENTS_VEHICULES" FromRole="PAIEMENTS" ToRole="VEHICULES" />
+        </EntityType>
+        <EntityType Name="TERME">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TERME1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NBRANNEE" Type="Int32" />
+          <Property Name="NBRKM" Type="Int32" />
+          <Property Name="PRIMEKM" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="LOCATIONS" Relationship="Self.FK_LOCATIONS_TERMES" FromRole="TERMES" ToRole="LOCATIONS" />
+        </EntityType>
+        <EntityType Name="TYPE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TYPE1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="VEHICULES" Relationship="Self.FK_VEHICULES_TYPES" FromRole="TYPES" ToRole="VEHICULES" />
+        </EntityType>
+        <EntityType Name="VEHICULE">
+          <Key>
+            <PropertyRef Name="NIV" />
+          </Key>
+          <Property Name="NIV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MODELE" Type="Int32" Nullable="false" />
+          <Property Name="ANNEE" Type="Int32" Nullable="false" />
+          <Property Name="TYPE" Type="Int32" Nullable="false" />
+          <Property Name="COULEUR" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="COULEUR1" Relationship="Self.FK_VEHICULES_COULEURS" FromRole="VEHICULES" ToRole="COULEURS" />
+          <NavigationProperty Name="LOCATIONS" Relationship="Self.FK_LOCATIONS_VEHICULES" FromRole="VEHICULES" ToRole="LOCATIONS" />
+          <NavigationProperty Name="MODELE1" Relationship="Self.FK_VEHICULES_MODELES" FromRole="VEHICULES" ToRole="MODELES" />
+          <NavigationProperty Name="OPTION" Relationship="Self.FK_OPTIONS_VEHICULES" FromRole="VEHICULES" ToRole="OPTIONS" />
+          <NavigationProperty Name="PAIEMENTS" Relationship="Self.FK_PAIEMENTS_VEHICULES" FromRole="VEHICULES" ToRole="PAIEMENTS" />
+          <NavigationProperty Name="TYPE1" Relationship="Self.FK_VEHICULES_TYPES" FromRole="VEHICULES" ToRole="TYPES" />
+        </EntityType>
+        <EntityType Name="Etape3">
+          <Key>
+            <PropertyRef Name="TELEPHONE" />
+            <PropertyRef Name="NIV" />
+            <PropertyRef Name="MODELE" />
+            <PropertyRef Name="ANNEE" />
+          </Key>
+          <Property Name="NOM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TELEPHONE" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="NIV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MODELE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ANNEE" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LOCATIONS_CLIENTS">
+          <End Role="CLIENTS" Type="Self.CLIENT" Multiplicity="1" />
+          <End Role="LOCATIONS" Type="Self.LOCATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTS">
+              <PropertyRef Name="IDCLIENT" />
+            </Principal>
+            <Dependent Role="LOCATIONS">
+              <PropertyRef Name="IDCLIENT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PAIEMENTS_CLIENTS">
+          <End Role="CLIENTS" Type="Self.CLIENT" Multiplicity="1" />
+          <End Role="PAIEMENTS" Type="Self.PAIEMENT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTS">
+              <PropertyRef Name="IDCLIENT" />
+            </Principal>
+            <Dependent Role="PAIEMENTS">
+              <PropertyRef Name="IDCLIENT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VEHICULES_COULEURS">
+          <End Role="COULEURS" Type="Self.COULEUR" Multiplicity="1" />
+          <End Role="VEHICULES" Type="Self.VEHICULE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COULEURS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VEHICULES">
+              <PropertyRef Name="COULEUR" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LOCATIONS_TERMES">
+          <End Role="TERMES" Type="Self.TERME" Multiplicity="1" />
+          <End Role="LOCATIONS" Type="Self.LOCATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TERMES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LOCATIONS">
+              <PropertyRef Name="TERME" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LOCATIONS_VEHICULES">
+          <End Role="VEHICULES" Type="Self.VEHICULE" Multiplicity="1" />
+          <End Role="LOCATIONS" Type="Self.LOCATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VEHICULES">
+              <PropertyRef Name="NIV" />
+            </Principal>
+            <Dependent Role="LOCATIONS">
+              <PropertyRef Name="NIV" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VEHICULES_MODELES">
+          <End Role="MODELES" Type="Self.MODELE" Multiplicity="1" />
+          <End Role="VEHICULES" Type="Self.VEHICULE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MODELES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VEHICULES">
+              <PropertyRef Name="MODELE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OPTIONS_VEHICULES">
+          <End Role="VEHICULES" Type="Self.VEHICULE" Multiplicity="1" />
+          <End Role="OPTIONS" Type="Self.OPTION" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="VEHICULES">
+              <PropertyRef Name="NIV" />
+            </Principal>
+            <Dependent Role="OPTIONS">
+              <PropertyRef Name="NIV" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PAIEMENTS_VEHICULES">
+          <End Role="VEHICULES" Type="Self.VEHICULE" Multiplicity="1" />
+          <End Role="PAIEMENTS" Type="Self.PAIEMENT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VEHICULES">
+              <PropertyRef Name="NIV" />
+            </Principal>
+            <Dependent Role="PAIEMENTS">
+              <PropertyRef Name="NIV" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VEHICULES_TYPES">
+          <End Role="TYPES" Type="Self.TYPE" Multiplicity="1" />
+          <End Role="VEHICULES" Type="Self.VEHICULE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VEHICULES">
+              <PropertyRef Name="TYPE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="myConnection" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AUDITS" EntityType="Self.AUDIT" />
+          <EntitySet Name="CLIENTS" EntityType="Self.CLIENT" />
+          <EntitySet Name="COULEURS" EntityType="Self.COULEUR" />
+          <EntitySet Name="LOCATIONS" EntityType="Self.LOCATION" />
+          <EntitySet Name="MODELES" EntityType="Self.MODELE" />
+          <EntitySet Name="OPTIONS" EntityType="Self.OPTION" />
+          <EntitySet Name="PAIEMENTS" EntityType="Self.PAIEMENT" />
+          <EntitySet Name="TERMES" EntityType="Self.TERME" />
+          <EntitySet Name="TYPES" EntityType="Self.TYPE" />
+          <EntitySet Name="VEHICULES" EntityType="Self.VEHICULE" />
+          <EntitySet Name="Etape3" EntityType="Self.Etape3" />
+          <AssociationSet Name="FK_LOCATIONS_CLIENTS" Association="Self.FK_LOCATIONS_CLIENTS">
+            <End Role="CLIENTS" EntitySet="CLIENTS" />
+            <End Role="LOCATIONS" EntitySet="LOCATIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAIEMENTS_CLIENTS" Association="Self.FK_PAIEMENTS_CLIENTS">
+            <End Role="CLIENTS" EntitySet="CLIENTS" />
+            <End Role="PAIEMENTS" EntitySet="PAIEMENTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VEHICULES_COULEURS" Association="Self.FK_VEHICULES_COULEURS">
+            <End Role="COULEURS" EntitySet="COULEURS" />
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LOCATIONS_TERMES" Association="Self.FK_LOCATIONS_TERMES">
+            <End Role="TERMES" EntitySet="TERMES" />
+            <End Role="LOCATIONS" EntitySet="LOCATIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LOCATIONS_VEHICULES" Association="Self.FK_LOCATIONS_VEHICULES">
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+            <End Role="LOCATIONS" EntitySet="LOCATIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VEHICULES_MODELES" Association="Self.FK_VEHICULES_MODELES">
+            <End Role="MODELES" EntitySet="MODELES" />
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OPTIONS_VEHICULES" Association="Self.FK_OPTIONS_VEHICULES">
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+            <End Role="OPTIONS" EntitySet="OPTIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAIEMENTS_VEHICULES" Association="Self.FK_PAIEMENTS_VEHICULES">
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+            <End Role="PAIEMENTS" EntitySet="PAIEMENTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VEHICULES_TYPES" Association="Self.FK_VEHICULES_TYPES">
+            <End Role="TYPES" EntitySet="TYPES" />
+            <End Role="VEHICULES" EntitySet="VEHICULES" />
+          </AssociationSet>
+          <FunctionImport Name="INSERE_LOCATIONS">
+            <Parameter Name="datedebut" Mode="In" Type="DateTime" />
+            <Parameter Name="datepaiement" Mode="In" Type="DateTime" />
+            <Parameter Name="montant" Mode="In" Type="Decimal" />
+            <Parameter Name="nbrpaiement" Mode="In" Type="Int32" />
+            <Parameter Name="niv" Mode="In" Type="String" />
+            <Parameter Name="terme" Mode="In" Type="Int32" />
+            <Parameter Name="idclient" Mode="In" Type="Int32" />
+            <Parameter Name="km_debut" Mode="In" Type="Int32" />
+            <Parameter Name="km_fin" Mode="In" Type="Int32" />
+            <Parameter Name="valeur" Mode="In" Type="Decimal" />
+            <Parameter Name="usage" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="INSERE_PAIEMENT">
+            <Parameter Name="montant" Mode="In" Type="Decimal" />
+            <Parameter Name="niv" Mode="In" Type="String" />
+            <Parameter Name="idclient" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SELECT_LOCATION" ReturnType="Collection(SGMLModel.SELECT_LOCATION_Result)">
+            <Parameter Name="niv" Mode="In" Type="String" />
+            <Parameter Name="idclient" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SUPPRIME_CLIENT">
+            <Parameter Name="idclient" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UPDATE_MONTANT_LOCATION">
+            <Parameter Name="niv" Mode="In" Type="String" />
+            <Parameter Name="idclient" Mode="In" Type="Int32" />
+            <Parameter Name="montant" Mode="In" Type="Decimal" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="SELECT_LOCATION_Result">
+          <Property Type="DateTime" Name="DATEDEBUT" Nullable="true" />
+          <Property Type="DateTime" Name="DATEPAIEMENT" Nullable="true" />
+          <Property Type="Decimal" Name="MONTANT" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="NBRPAIEMENT" Nullable="true" />
+          <Property Type="String" Name="NIV" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="TERME" Nullable="false" />
+          <Property Type="Int32" Name="IDCLIENT" Nullable="false" />
+          <Property Type="Int32" Name="KM_DEBUT" Nullable="true" />
+          <Property Type="Int32" Name="KM_FIN" Nullable="true" />
+          <Property Type="Decimal" Name="VALEUR" Nullable="true" Precision="19" />
+          <Property Type="Boolean" Name="USAGE" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SGMLModelStoreContainer" CdmEntityContainer="myConnection">
+          <EntitySetMapping Name="AUDITS">
+            <EntityTypeMapping TypeName="SGMLModel.AUDIT">
+              <MappingFragment StoreEntitySet="AUDITS">
+                <ScalarProperty Name="IDTRANSACTION" ColumnName="IDTRANSACTION" />
+                <ScalarProperty Name="IDLOCATION" ColumnName="IDLOCATION" />
+                <ScalarProperty Name="IDCLIENT" ColumnName="IDCLIENT" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="CHAMP" ColumnName="CHAMP" />
+                <ScalarProperty Name="MODIF" ColumnName="MODIF" />
+                <ScalarProperty Name="ANCVAL" ColumnName="ANCVAL" />
+                <ScalarProperty Name="NOUVAL" ColumnName="NOUVAL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CLIENTS">
+            <EntityTypeMapping TypeName="SGMLModel.CLIENT">
+              <MappingFragment StoreEntitySet="CLIENTS">
+                <ScalarProperty Name="IDCLIENT" ColumnName="IDCLIENT" />
+                <ScalarProperty Name="PRENOM" ColumnName="PRENOM" />
+                <ScalarProperty Name="NOM" ColumnName="NOM" />
+                <ScalarProperty Name="ADDRESSE" ColumnName="ADDRESSE" />
+                <ScalarProperty Name="VILLE" ColumnName="VILLE" />
+                <ScalarProperty Name="PROVINCE" ColumnName="PROVINCE" />
+                <ScalarProperty Name="CODEPOSTAL" ColumnName="CODEPOSTAL" />
+                <ScalarProperty Name="TELEPHONE" ColumnName="TELEPHONE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="COULEURS">
+            <EntityTypeMapping TypeName="SGMLModel.COULEUR">
+              <MappingFragment StoreEntitySet="COULEURS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="COULEUR1" ColumnName="COULEUR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOCATIONS">
+            <EntityTypeMapping TypeName="SGMLModel.LOCATION">
+              <MappingFragment StoreEntitySet="LOCATIONS">
+                <ScalarProperty Name="DATEDEBUT" ColumnName="DATEDEBUT" />
+                <ScalarProperty Name="DATEPAIEMENT" ColumnName="DATEPAIEMENT" />
+                <ScalarProperty Name="MONTANT" ColumnName="MONTANT" />
+                <ScalarProperty Name="NBRPAIEMENT" ColumnName="NBRPAIEMENT" />
+                <ScalarProperty Name="NIV" ColumnName="NIV" />
+                <ScalarProperty Name="TERME" ColumnName="TERME" />
+                <ScalarProperty Name="IDCLIENT" ColumnName="IDCLIENT" />
+                <ScalarProperty Name="KM_DEBUT" ColumnName="KM_DEBUT" />
+                <ScalarProperty Name="KM_FIN" ColumnName="KM_FIN" />
+                <ScalarProperty Name="VALEUR" ColumnName="VALEUR" />
+                <ScalarProperty Name="USAGE" ColumnName="USAGE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MODELES">
+            <EntityTypeMapping TypeName="SGMLModel.MODELE">
+              <MappingFragment StoreEntitySet="MODELES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="MODELE1" ColumnName="MODELE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OPTIONS">
+            <EntityTypeMapping TypeName="SGMLModel.OPTION">
+              <MappingFragment StoreEntitySet="OPTIONS">
+                <ScalarProperty Name="NIV" ColumnName="NIV" />
+                <ScalarProperty Name="TRANSMISSIONAUTO" ColumnName="TRANSMISSIONAUTO" />
+                <ScalarProperty Name="CLIMATISATION" ColumnName="CLIMATISATION" />
+                <ScalarProperty Name="ANTIDEMARREUR" ColumnName="ANTIDEMARREUR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PAIEMENTS">
+            <EntityTypeMapping TypeName="SGMLModel.PAIEMENT">
+              <MappingFragment StoreEntitySet="PAIEMENTS">
+                <ScalarProperty Name="IDTRANSACTION" ColumnName="IDTRANSACTION" />
+                <ScalarProperty Name="MONTANT" ColumnName="MONTANT" />
+                <ScalarProperty Name="ANNULER" ColumnName="ANNULER" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="NIV" ColumnName="NIV" />
+                <ScalarProperty Name="IDCLIENT" ColumnName="IDCLIENT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TERMES">
+            <EntityTypeMapping TypeName="SGMLModel.TERME">
+              <MappingFragment StoreEntitySet="TERMES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TERME1" ColumnName="TERME" />
+                <ScalarProperty Name="NBRANNEE" ColumnName="NBRANNEE" />
+                <ScalarProperty Name="NBRKM" ColumnName="NBRKM" />
+                <ScalarProperty Name="PRIMEKM" ColumnName="PRIMEKM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TYPES">
+            <EntityTypeMapping TypeName="SGMLModel.TYPE">
+              <MappingFragment StoreEntitySet="TYPES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TYPE1" ColumnName="TYPE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEHICULES">
+            <EntityTypeMapping TypeName="SGMLModel.VEHICULE">
+              <MappingFragment StoreEntitySet="VEHICULES">
+                <ScalarProperty Name="NIV" ColumnName="NIV" />
+                <ScalarProperty Name="MODELE" ColumnName="MODELE" />
+                <ScalarProperty Name="ANNEE" ColumnName="ANNEE" />
+                <ScalarProperty Name="TYPE" ColumnName="TYPE" />
+                <ScalarProperty Name="COULEUR" ColumnName="COULEUR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Etape3">
+            <EntityTypeMapping TypeName="SGMLModel.Etape3">
+              <MappingFragment StoreEntitySet="Etape3">
+                <ScalarProperty Name="NOM" ColumnName="NOM" />
+                <ScalarProperty Name="TELEPHONE" ColumnName="TELEPHONE" />
+                <ScalarProperty Name="NIV" ColumnName="NIV" />
+                <ScalarProperty Name="MODELE" ColumnName="MODELE" />
+                <ScalarProperty Name="ANNEE" ColumnName="ANNEE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="INSERE_LOCATIONS" FunctionName="SGMLModel.Store.INSERE_LOCATIONS" />
+          <FunctionImportMapping FunctionImportName="INSERE_PAIEMENT" FunctionName="SGMLModel.Store.INSERE_PAIEMENT" />
+          <FunctionImportMapping FunctionImportName="SELECT_LOCATION" FunctionName="SGMLModel.Store.SELECT_LOCATION">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SGMLModel.SELECT_LOCATION_Result">
+                <ScalarProperty Name="DATEDEBUT" ColumnName="DATEDEBUT" />
+                <ScalarProperty Name="DATEPAIEMENT" ColumnName="DATEPAIEMENT" />
+                <ScalarProperty Name="MONTANT" ColumnName="MONTANT" />
+                <ScalarProperty Name="NBRPAIEMENT" ColumnName="NBRPAIEMENT" />
+                <ScalarProperty Name="NIV" ColumnName="NIV" />
+                <ScalarProperty Name="TERME" ColumnName="TERME" />
+                <ScalarProperty Name="IDCLIENT" ColumnName="IDCLIENT" />
+                <ScalarProperty Name="KM_DEBUT" ColumnName="KM_DEBUT" />
+                <ScalarProperty Name="KM_FIN" ColumnName="KM_FIN" />
+                <ScalarProperty Name="VALEUR" ColumnName="VALEUR" />
+                <ScalarProperty Name="USAGE" ColumnName="USAGE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SUPPRIME_CLIENT" FunctionName="SGMLModel.Store.SUPPRIME_CLIENT" />
+          <FunctionImportMapping FunctionImportName="UPDATE_MONTANT_LOCATION" FunctionName="SGMLModel.Store.UPDATE_MONTANT_LOCATION" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
