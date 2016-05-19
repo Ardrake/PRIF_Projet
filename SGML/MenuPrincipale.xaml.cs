@@ -21,11 +21,14 @@ namespace SGML
     {
 
         DataPRIFDataContext context = new DataPRIFDataContext();
-        
 
+        LOCATION selectedLocation = null;
         VEHICULE selectedVehicule = null;
-        CLIENT selectedClient = null;
+        public static CLIENT selectedClient = null;
         TERME selectedTerme = null;
+
+        bool isInsertMode = false;
+        bool isBeingEdited = false;
 
         int lKMDebut = 0;
         int lValeur = 0;
@@ -37,6 +40,8 @@ namespace SGML
         int lIDClient = 0;
         int lKMFin = 0;
         bool lUsage = false;
+
+        bool typeOperationInsere = true;
 
         public MenuPrincipale()
         {
@@ -70,22 +75,40 @@ namespace SGML
             PaiementListClient.ItemsSource = GetAllClient();
             PaiementListVehicule.ItemsSource = GetAllVehicule();
             TermesListe.ItemsSource = context.TERMEs;
-            
-            lesContratDeLocation.ItemsSource = context.LOCATIONs;
+
+            var sqlListeContrat = from l in context.LOCATIONs
+                                  join v in context.VEHICULEs on l.NIV equals v.NIV
+                                  join m in context.MODELEs on v.MODELE equals m.ID
+                                  join t in context.TYPEs on v.TYPE equals t.ID
+                                  join c in  context.COULEURs on v.COULEUR equals c.ID
+                                  select l;
+
+            lesContratDeLocation.ItemsSource = sqlListeContrat;
         }
 
         private void nouveauPaiment_Click(object sender, RoutedEventArgs e)
         {
             hideAllGrids();
             GridNouveauPaiement.Visibility = Visibility.Visible;
+            PaiementListContrat.ItemsSource = context.LOCATIONs;
+            ListeDesPaiement.CanUserDeleteRows = false;
         }
 
+        private void PrintEtatDeCompte_Click(object sender, RoutedEventArgs e)
+        {
+            hideAllGrids();
+            GridEtatCompte.Visibility = Visibility.Visible;
+            EtatListClient.ItemsSource = context.CLIENTs;
+        }
 
         private void hideAllGrids()
         {
             GridNouveauPaiement.Visibility = Visibility.Hidden;
             GridNouvelleLocation.Visibility = Visibility.Hidden;
             GridDashBoard.Visibility = Visibility.Hidden;
+            GridEtatCompte.Visibility = Visibility.Hidden;
+
+            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -147,12 +170,12 @@ namespace SGML
 
         private void insereLocationButton_Click(object sender, RoutedEventArgs e)
         {
-            bool validation = false;
             bool valclient = false;
             bool valvehicule = false;
             bool valterme = false;
             bool valdatedebut = false;
             bool valdatefin = false;
+
 
             if (selectedClient != null)
             {
@@ -211,19 +234,40 @@ namespace SGML
 
             if (valclient && valvehicule && valterme && valdatedebut && valdatefin)
             {
-                try
+                if (typeOperationInsere) //Insertion d'un nouvelle location
                 {
-                    context.INSERE_LOCATIONS(lDateDebut, lDatePremierPaiement, lMontantPaiement, lNombrePaiement,
-                                             selectedVehicule.NIV, selectedTerme.ID, selectedClient.IDCLIENT,
-                                             lKMDebut, lKMFin, lValeur, lUsage);
-                    MessageBox.Show("Nouveau contrat de location enregistré");
+                    try
+                    {
+                        context.INSERE_LOCATIONS(lDateDebut, lDatePremierPaiement, lMontantPaiement, lNombrePaiement,
+                                                 selectedVehicule.NIV, selectedTerme.ID, selectedClient.IDCLIENT,
+                                                 lKMDebut, lKMFin, lValeur, lUsage);
+                        MessageBox.Show("Nouveau contrat de location enregistré");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Exception a mettre ici");
+                    }
+                    finally
+                    {
+                        reinitlocation();
+                    }
                 }
-                catch
+
+                else // Modification de la location
                 {
-                    MessageBox.Show("Exception a mettre ici");
-                }
-                finally
-                {
+                    selectedLocation.DATEDEBUT = lDateDebut;
+                    selectedLocation.DATEPAIEMENT = lDatePremierPaiement;
+                    selectedLocation.MONTANT = lMontantPaiement;
+                    selectedLocation.NBRPAIEMENT = lNombrePaiement;
+                    selectedLocation.NIV = selectedVehicule.NIV;
+                    selectedLocation.TERME = selectedTerme.ID;
+                    selectedLocation.IDCLIENT = selectedClient.IDCLIENT;
+                    selectedLocation.KM_DEBUT = lKMDebut;
+                    selectedLocation.KM_FIN = lKMFin;
+                    selectedLocation.VALEUR = lValeur;
+                    selectedLocation.USAGE = lUsage;
+                    context.SubmitChanges();
+                    MessageBox.Show("Modification sauvegarder");
                     reinitlocation();
                 }
             }
@@ -275,7 +319,7 @@ namespace SGML
             catch
             {
                 MessageBox.Show("Caractere non valide, veuillez entré un nombre");
-                ActualValeur.Text = "0";
+                ActualValeur.Text = String.Format("{0:0.00}$", 0);
                 ActualValeur.Background = Brushes.Orange;
                 Dispatcher.BeginInvoke(DispatcherPriority.Input,
                     new Action(delegate ()
@@ -289,7 +333,7 @@ namespace SGML
                 if (lValeur <= 0)
                 {
                     MessageBox.Show("valeur invalid, entre un nombre plus grand que zero");
-                    ActualValeur.Text = "0";
+                    ActualValeur.Text = String.Format("{0:0.00}$", 0);
                     ActualValeur.Background = Brushes.Orange;
                     Dispatcher.BeginInvoke(DispatcherPriority.Input,
                         new Action(delegate ()
@@ -303,6 +347,7 @@ namespace SGML
 
         private void reinitlocation()
         {
+            selectedLocation = null;
             selectedClient = null;
             selectedVehicule = null;
             selectedTerme = null;
@@ -315,9 +360,9 @@ namespace SGML
             TermesListe.SelectedIndex = -1;
 
             ActualKM.Text = "0";
-            ActualValeur.Text = "0";
-            montantPaiement.Text = "0";
-            
+            ActualValeur.Text = String.Format("{0:0.00}$", 0);
+            montantPaiement.Text = String.Format("{0:0.00}$", 0);
+
 
             lKMDebut = 0;
             lValeur = 0;
@@ -327,6 +372,9 @@ namespace SGML
             lIDClient = 0;
             lKMFin = 0;
             lUsage = false;
+
+            ButtonInsereLcoation.Content = "Inséré Location";
+            typeOperationInsere = true;
         }
 
 
@@ -340,7 +388,7 @@ namespace SGML
             catch
             {
                 MessageBox.Show("Caractere non valide, veuillez entré un nombre");
-                montantPaiement.Text = "0";
+                montantPaiement.Text = String.Format("{0:0.00}$", 0);
                 montantPaiement.Background = Brushes.Orange;
                 Dispatcher.BeginInvoke(DispatcherPriority.Input,
                     new Action(delegate ()
@@ -354,7 +402,7 @@ namespace SGML
                 if (lMontantPaiement <= 0)
                 {
                     MessageBox.Show("valeur invalid, entre un nombre plus grand que zero");
-                    montantPaiement.Text = "0";
+                    montantPaiement.Text = String.Format("{0:0.00}$", 0);
                     montantPaiement.Background = Brushes.Orange;
                     Dispatcher.BeginInvoke(DispatcherPriority.Input,
                         new Action(delegate ()
@@ -373,7 +421,105 @@ namespace SGML
 
         private void ButtonModifierLocation(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("On load et modifie le contrat");
+            // Stored proc SELECT LOCATION non utiliser dans ce cas, parce qu'on est bindé directement sur la liste des location
+            if (lesContratDeLocation.SelectedItems.Count == 1)
+            {
+                ButtonInsereLcoation.Content = "Sauvegardé modification";
+                typeOperationInsere = false;
+                selectedLocation = (LOCATION)lesContratDeLocation.SelectedItem;
+                selectedClient = selectedLocation.CLIENT;
+                selectedTerme = selectedLocation.TERME1;
+                selectedVehicule = selectedLocation.VEHICULE;
+                PaiementListClient.SelectedValue = selectedLocation.CLIENT;
+                PaiementListVehicule.SelectedValue = selectedLocation.VEHICULE.NIV + " - " + selectedLocation.VEHICULE.MODELE1.MODELE1 +
+                                                     ", " + selectedLocation.VEHICULE.ANNEE + ", " + selectedLocation.VEHICULE.TYPE1.TYPE1 +
+                                                     ", " + selectedLocation.VEHICULE.COULEUR1.COULEUR1;
+                TermesListe.SelectedValue = selectedLocation.TERME1;
+                ActualKM.Text = Convert.ToString(selectedLocation.KM_DEBUT);
+                ActualValeur.Text = String.Format("{0:0.00}$", selectedLocation.VALEUR);
+                montantPaiement.Text = String.Format("{0:0.00}$", selectedLocation.MONTANT); 
+                SelectedDateContrat.Text = selectedLocation.DATEDEBUT.ToString();
+                SelectedDatePremierPaiement.Text = selectedLocation.DATEPAIEMENT.ToString();
+            }
+            else
+            {
+                MessageBox.Show("Vous devez selectionnez un contrat a modifiler");
+            }
         }
+
+        private void PaiementListContrat_DropDownClosed(object sender, EventArgs e)
+        {
+            selectedLocation = (LOCATION)PaiementListContrat.SelectedItem;
+            try
+            {
+                paimentMontantDu.Text = String.Format("{0:0.00}$", selectedLocation.MONTANT);
+            }
+            catch
+            {
+                paimentMontantDu.Text = "0.00$";
+            }
+
+            try
+            {
+                ListeDesPaiement.ItemsSource = GetPaiemmentListe(selectedLocation.IDCLIENT, selectedLocation.NIV);
+            }
+            catch
+            {
+                ListeDesPaiement.ItemsSource = null;
+            }
     }
+
+        private ObservableCollection<PAIEMENT> GetPaiemmentListe(int idclient, string niv)
+        {
+            var listPaiement = from m in context.PAIEMENTs
+                               where m.IDCLIENT == idclient && m.NIV == niv
+                               select m;
+
+            return new ObservableCollection<PAIEMENT>(listPaiement);
+        }
+
+        private void dgEmp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            PAIEMENT myPaiement = e.Row.DataContext as PAIEMENT;
+            
+            if (isInsertMode && myPaiement != null) // Mode insertion de record
+            {
+                var InsertRecord = MessageBox.Show("Voulez vous rajouter un paiement de " + myPaiement.MONTANT + " en date du " + String.Format("{0:dd-MM-yyyy}", myPaiement.DATE) + " ?", "Confirmez", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (InsertRecord == MessageBoxResult.Yes)
+                {
+                    context.INSERE_PAIEMENT(myPaiement.MONTANT, selectedLocation.VEHICULE.NIV, selectedLocation.CLIENT.IDCLIENT);
+
+                    context.SubmitChanges();
+                    ListeDesPaiement.ItemsSource = GetPaiemmentListe(selectedLocation.IDCLIENT, selectedLocation.NIV);
+
+                    MessageBox.Show("Traitement du paiement en date du: " + String.Format("{0:dd-MM-yyyy}", myPaiement.DATE) + " Montant: " + myPaiement.MONTANT + " a été rajouté!", "Paiement Enregistré", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                    ListeDesPaiement.ItemsSource = GetPaiemmentListe(selectedLocation.IDCLIENT, selectedLocation.NIV);
+            }
+            context.SubmitChanges(); // Sauvegarde les changement si on insere pas
+            isInsertMode = false;
+        }
+
+        private void dgEmp_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            isInsertMode = true;
+        }
+
+        private void dgEmp_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            isBeingEdited = true;
+        }
+
+        private void Button_Click_Etat_de_Compte(object sender, RoutedEventArgs e)
+        {
+            selectedClient = (CLIENT)EtatListClient.SelectedItem;
+            EtatCompte myEtatCompte = new EtatCompte(selectedClient);
+            myEtatCompte.ShowDialog();
+
+        }
+
+      
+    }
+
 }

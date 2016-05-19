@@ -22,6 +22,7 @@ namespace SGML
         public MainWindow()
         {
             InitializeComponent();
+
         }
 
         private void button_Click_1(object sender, RoutedEventArgs e)

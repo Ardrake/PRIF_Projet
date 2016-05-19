@@ -51,6 +51,9 @@ namespace SGML
     partial void InsertLOCATION(LOCATION instance);
     partial void UpdateLOCATION(LOCATION instance);
     partial void DeleteLOCATION(LOCATION instance);
+    partial void InsertPAIEMENT(PAIEMENT instance);
+    partial void UpdatePAIEMENT(PAIEMENT instance);
+    partial void DeletePAIEMENT(PAIEMENT instance);
     #endregion
 		
 		public DataPRIFDataContext() : 
@@ -139,6 +142,14 @@ namespace SGML
 			}
 		}
 		
+		public System.Data.Linq.Table<PAIEMENT> PAIEMENTs
+		{
+			get
+			{
+				return this.GetTable<PAIEMENT>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SELECT_ALL_VEHICULE")]
 		public ISingleResult<SELECT_ALL_VEHICULEResult> SELECT_ALL_VEHICULE()
 		{
@@ -150,6 +161,13 @@ namespace SGML
 		public int INSERE_LOCATIONS([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> datedebut, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> datepaiement, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Money")] System.Nullable<decimal> montant, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> nbrpaiement, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="NVarChar(50)")] string niv, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> terme, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> idclient, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> km_debut, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> km_fin, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Money")] System.Nullable<decimal> valeur, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] System.Nullable<bool> usage)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), datedebut, datepaiement, montant, nbrpaiement, niv, terme, idclient, km_debut, km_fin, valeur, usage);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.INSERE_PAIEMENT")]
+		public int INSERE_PAIEMENT([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Money")] System.Nullable<decimal> montant, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string niv, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> idclient)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), montant, niv, idclient);
 			return ((int)(result.ReturnValue));
 		}
 	}
@@ -178,6 +196,8 @@ namespace SGML
 		
 		private EntitySet<LOCATION> _LOCATIONs;
 		
+		private EntitySet<PAIEMENT> _PAIEMENTs;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -203,6 +223,7 @@ namespace SGML
 		public CLIENT()
 		{
 			this._LOCATIONs = new EntitySet<LOCATION>(new Action<LOCATION>(this.attach_LOCATIONs), new Action<LOCATION>(this.detach_LOCATIONs));
+			this._PAIEMENTs = new EntitySet<PAIEMENT>(new Action<PAIEMENT>(this.attach_PAIEMENTs), new Action<PAIEMENT>(this.detach_PAIEMENTs));
 			OnCreated();
 		}
 		
@@ -379,6 +400,19 @@ namespace SGML
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CLIENT_PAIEMENT", Storage="_PAIEMENTs", ThisKey="IDCLIENT", OtherKey="IDCLIENT")]
+		public EntitySet<PAIEMENT> PAIEMENTs
+		{
+			get
+			{
+				return this._PAIEMENTs;
+			}
+			set
+			{
+				this._PAIEMENTs.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -410,6 +444,18 @@ namespace SGML
 			this.SendPropertyChanging();
 			entity.CLIENT = null;
 		}
+		
+		private void attach_PAIEMENTs(PAIEMENT entity)
+		{
+			this.SendPropertyChanging();
+			entity.CLIENT = this;
+		}
+		
+		private void detach_PAIEMENTs(PAIEMENT entity)
+		{
+			this.SendPropertyChanging();
+			entity.CLIENT = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.VEHICULES")]
@@ -429,6 +475,8 @@ namespace SGML
 		private int _COULEUR;
 		
 		private EntitySet<LOCATION> _LOCATIONs;
+		
+		private EntitySet<PAIEMENT> _PAIEMENTs;
 		
 		private EntityRef<TYPE> _TYPE1;
 		
@@ -455,6 +503,7 @@ namespace SGML
 		public VEHICULE()
 		{
 			this._LOCATIONs = new EntitySet<LOCATION>(new Action<LOCATION>(this.attach_LOCATIONs), new Action<LOCATION>(this.detach_LOCATIONs));
+			this._PAIEMENTs = new EntitySet<PAIEMENT>(new Action<PAIEMENT>(this.attach_PAIEMENTs), new Action<PAIEMENT>(this.detach_PAIEMENTs));
 			this._TYPE1 = default(EntityRef<TYPE>);
 			this._COULEUR1 = default(EntityRef<COULEUR>);
 			this._MODELE1 = default(EntityRef<MODELE>);
@@ -583,6 +632,19 @@ namespace SGML
 			set
 			{
 				this._LOCATIONs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="VEHICULE_PAIEMENT", Storage="_PAIEMENTs", ThisKey="NIV", OtherKey="NIV")]
+		public EntitySet<PAIEMENT> PAIEMENTs
+		{
+			get
+			{
+				return this._PAIEMENTs;
+			}
+			set
+			{
+				this._PAIEMENTs.Assign(value);
 			}
 		}
 		
@@ -715,6 +777,18 @@ namespace SGML
 		}
 		
 		private void detach_LOCATIONs(LOCATION entity)
+		{
+			this.SendPropertyChanging();
+			entity.VEHICULE = null;
+		}
+		
+		private void attach_PAIEMENTs(PAIEMENT entity)
+		{
+			this.SendPropertyChanging();
+			entity.VEHICULE = this;
+		}
+		
+		private void detach_PAIEMENTs(PAIEMENT entity)
 		{
 			this.SendPropertyChanging();
 			entity.VEHICULE = null;
@@ -1642,6 +1716,270 @@ namespace SGML
 					if ((value != null))
 					{
 						value.LOCATIONs.Add(this);
+						this._NIV = value.NIV;
+					}
+					else
+					{
+						this._NIV = default(string);
+					}
+					this.SendPropertyChanged("VEHICULE");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PAIEMENTS")]
+	public partial class PAIEMENT : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _IDTRANSACTION;
+		
+		private System.Nullable<decimal> _MONTANT;
+		
+		private bool _ANNULER;
+		
+		private System.Nullable<System.DateTime> _DATE;
+		
+		private string _NIV;
+		
+		private int _IDCLIENT;
+		
+		private EntityRef<CLIENT> _CLIENT;
+		
+		private EntityRef<VEHICULE> _VEHICULE;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDTRANSACTIONChanging(int value);
+    partial void OnIDTRANSACTIONChanged();
+    partial void OnMONTANTChanging(System.Nullable<decimal> value);
+    partial void OnMONTANTChanged();
+    partial void OnANNULERChanging(bool value);
+    partial void OnANNULERChanged();
+    partial void OnDATEChanging(System.Nullable<System.DateTime> value);
+    partial void OnDATEChanged();
+    partial void OnNIVChanging(string value);
+    partial void OnNIVChanged();
+    partial void OnIDCLIENTChanging(int value);
+    partial void OnIDCLIENTChanged();
+    #endregion
+		
+		public PAIEMENT()
+		{
+			this._CLIENT = default(EntityRef<CLIENT>);
+			this._VEHICULE = default(EntityRef<VEHICULE>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IDTRANSACTION", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int IDTRANSACTION
+		{
+			get
+			{
+				return this._IDTRANSACTION;
+			}
+			set
+			{
+				if ((this._IDTRANSACTION != value))
+				{
+					this.OnIDTRANSACTIONChanging(value);
+					this.SendPropertyChanging();
+					this._IDTRANSACTION = value;
+					this.SendPropertyChanged("IDTRANSACTION");
+					this.OnIDTRANSACTIONChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MONTANT", DbType="Money")]
+		public System.Nullable<decimal> MONTANT
+		{
+			get
+			{
+				return this._MONTANT;
+			}
+			set
+			{
+				if ((this._MONTANT != value))
+				{
+					this.OnMONTANTChanging(value);
+					this.SendPropertyChanging();
+					this._MONTANT = value;
+					this.SendPropertyChanged("MONTANT");
+					this.OnMONTANTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ANNULER", DbType="Bit NOT NULL")]
+		public bool ANNULER
+		{
+			get
+			{
+				return this._ANNULER;
+			}
+			set
+			{
+				if ((this._ANNULER != value))
+				{
+					this.OnANNULERChanging(value);
+					this.SendPropertyChanging();
+					this._ANNULER = value;
+					this.SendPropertyChanged("ANNULER");
+					this.OnANNULERChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DATE", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DATE
+		{
+			get
+			{
+				return this._DATE;
+			}
+			set
+			{
+				if ((this._DATE != value))
+				{
+					this.OnDATEChanging(value);
+					this.SendPropertyChanging();
+					this._DATE = value;
+					this.SendPropertyChanged("DATE");
+					this.OnDATEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NIV", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string NIV
+		{
+			get
+			{
+				return this._NIV;
+			}
+			set
+			{
+				if ((this._NIV != value))
+				{
+					if (this._VEHICULE.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnNIVChanging(value);
+					this.SendPropertyChanging();
+					this._NIV = value;
+					this.SendPropertyChanged("NIV");
+					this.OnNIVChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IDCLIENT", DbType="Int NOT NULL")]
+		public int IDCLIENT
+		{
+			get
+			{
+				return this._IDCLIENT;
+			}
+			set
+			{
+				if ((this._IDCLIENT != value))
+				{
+					if (this._CLIENT.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnIDCLIENTChanging(value);
+					this.SendPropertyChanging();
+					this._IDCLIENT = value;
+					this.SendPropertyChanged("IDCLIENT");
+					this.OnIDCLIENTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CLIENT_PAIEMENT", Storage="_CLIENT", ThisKey="IDCLIENT", OtherKey="IDCLIENT", IsForeignKey=true)]
+		public CLIENT CLIENT
+		{
+			get
+			{
+				return this._CLIENT.Entity;
+			}
+			set
+			{
+				CLIENT previousValue = this._CLIENT.Entity;
+				if (((previousValue != value) 
+							|| (this._CLIENT.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CLIENT.Entity = null;
+						previousValue.PAIEMENTs.Remove(this);
+					}
+					this._CLIENT.Entity = value;
+					if ((value != null))
+					{
+						value.PAIEMENTs.Add(this);
+						this._IDCLIENT = value.IDCLIENT;
+					}
+					else
+					{
+						this._IDCLIENT = default(int);
+					}
+					this.SendPropertyChanged("CLIENT");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="VEHICULE_PAIEMENT", Storage="_VEHICULE", ThisKey="NIV", OtherKey="NIV", IsForeignKey=true)]
+		public VEHICULE VEHICULE
+		{
+			get
+			{
+				return this._VEHICULE.Entity;
+			}
+			set
+			{
+				VEHICULE previousValue = this._VEHICULE.Entity;
+				if (((previousValue != value) 
+							|| (this._VEHICULE.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._VEHICULE.Entity = null;
+						previousValue.PAIEMENTs.Remove(this);
+					}
+					this._VEHICULE.Entity = value;
+					if ((value != null))
+					{
+						value.PAIEMENTs.Add(this);
 						this._NIV = value.NIV;
 					}
 					else

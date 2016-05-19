@@ -31,9 +31,6 @@
         <ContextMenu x:Key="menuZoneTexte" Style="{StaticResource stylePolice}" >
             <MenuItem Header="Effacer le nom" Name="effacerNom"  />
         </ContextMenu>
-        
-        
-       
     </Window.Resources>
 
     <Grid>
@@ -50,7 +47,7 @@
         <DockPanel Grid.ColumnSpan="3" Height="100" HorizontalAlignment="Stretch" Margin="0" Name="dockPanel1" VerticalAlignment="Top" Width="Auto">
             <Menu Style="{StaticResource stylePolice}" Height="23" Name="menu1" Width="Auto" DockPanel.Dock="Top" VerticalAlignment="Top">
                 <MenuItem Header="_Fichier">
-                    <MenuItem Header="Connection Base de données" Name="nouveauConnection" IsEnabled="True" >
+                    <MenuItem Header="Connection Base de données" Name="nouveauConnection" IsEnabled="False" >
                         <MenuItem.Icon>
                             <Image Source="client.png" Stretch="Fill" Height="16" Width="16"  />
                         </MenuItem.Icon>
@@ -87,13 +84,20 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
+                <MenuItem Header="Rapports">
+                    <MenuItem Header="État de compte" Name="PrintEtatDeCompte" IsEnabled="True" Click="PrintEtatDeCompte_Click">
+                        <MenuItem.Icon>
+                            <Image Source="vehicule.png" Stretch="Fill" Height="16" Width="16"  />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
                 <MenuItem Header="_Aide">
                     <MenuItem Header="_A propos du Systeme de Gestion Multi-Location" Name="aPropos" Click="aPropos_Click"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
 
-        <Grid x:Name="GridDashBoard" Grid.Column="1" Grid.Row="1" Visibility="Hidden">
+        <Grid x:Name="GridDashBoard" Grid.Column="1" Grid.Row="1" Visibility="Visible">
             <Label Content="Dashboard"/>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -102,11 +106,126 @@
                 </Grid.ColumnDefinitions>
             </Grid>
         </Grid>
-        <Grid x:Name="GridNouveauPaiement" Grid.Column="1" Grid.Row="1" Visibility="Hidden">
-            <Label Content="Nouveau Paiement"/>
+
+        <Grid x:Name="GridEtatCompte" Grid.Column="1" Grid.Row="1" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+            <StackPanel Orientation="Vertical">
+                <Label Style="{StaticResource styleTitre}" Content="Etat de Compte"/>
+                <Label Style="{StaticResource styleEntete}" Content="Veuillez selectionnez le Client"/>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Height="23" Name="EtatListClient" Width="250" Margin="2" HorizontalAlignment="Left" 
+                                  IsEditable="False" SelectedItem="{Binding ID}" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=NOM}"/>
+                                    <TextBlock Text=", "/>
+                                    <TextBlock Text="{Binding Path=PRENOM}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Margin="50,0" Content=" Imprime État de compte" Click="Button_Click_Etat_de_Compte"/>
+                </StackPanel>
+            </StackPanel>
         </Grid>
 
-        <Grid x:Name="GridNouvelleLocation" Grid.Column="1" Grid.Row="1" Visibility="Visible">
+
+        <Grid x:Name="GridNouveauPaiement" Grid.Column="1" Grid.Row="1" Visibility="Collapsed">
+            <StackPanel Orientation="Vertical">
+                <Label Style="{StaticResource styleTitre}" Content="Nouveau Paiement"/>
+                <Label Style="{StaticResource styleEntete}" Content="Selection du contrat"/>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Height="23" Name="PaiementListContrat" Width="550" Margin="2" HorizontalAlignment="Left" 
+                                  IsEditable="False" SelectedItem="{Binding ID}" DropDownClosed="PaiementListContrat_DropDownClosed" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding NIV}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding CLIENT.NOM}"/>
+                                    <TextBlock Text=", "/>
+                                    <TextBlock Text="{Binding CLIENT.PRENOM}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding VEHICULE.MODELE1.MODELE1}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding VEHICULE.TYPE1.TYPE1}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding VEHICULE.ANNEE}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding VEHICULE.COULEUR1.COULEUR1}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    
+                    <Label Margin="10,0" Content="Montant du: "/>
+                    <TextBlock x:Name="paimentMontantDu" Width="100" Margin="5" Text="0" TextAlignment="Right"/>
+
+                </StackPanel>
+                <Separator/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                
+                </StackPanel>
+                <Label Style="{StaticResource styleTitre}" Content="Liste des paiements"/>
+                <DataGrid x:Name="ListeDesPaiement" ItemsSource="{Binding}" AutoGenerateColumns="False" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                          RowEditEnding="dgEmp_RowEditEnding" AddingNewItem="dgEmp_AddingNewItem" BeginningEdit="dgEmp_BeginningEdit">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Date">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DATE, StringFormat=\{0:d\}}" Width="200" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <DatePicker SelectedDate ="{Binding DATE, StringFormat=00.00$, NotifyOnSourceUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn x:Name="leMontant" Header="Montant payé" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=MONTANT, StringFormat=00.00$}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="LeMontantTextbox" Text="{Binding MONTANT, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn x:Name="leAnnule" Header="Annulé" Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding Path=ANNULER}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <CheckBox x:Name="isAnnuler" IsChecked="{Binding ANNULER, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                
+                
+                
+
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="GridNouvelleLocation" Grid.Column="1" Grid.Row="1" Visibility="Collapsed">
             <StackPanel>
                 <Label Style="{StaticResource styleTitre}" Content="Gestion des contrats de location"/>
                 <Separator/>
@@ -132,7 +251,7 @@
                     <Label Content="Kilometrage actuel: "/>
                     <TextBox x:Name="ActualKM" Width="100" LostFocus="ActualKM_LostFocus" Text="0"/>
                     <Label Content="Valeur actuel $ : "/>
-                    <TextBox x:Name="ActualValeur" Width="100" LostFocus="ActualValeur_LostFocus" Text="0"/>
+                    <TextBox x:Name="ActualValeur" Width="100" LostFocus="ActualValeur_LostFocus" Text="0.00$"/>
                 </StackPanel>
                 <Label Style="{StaticResource styleEntete}" Content="Selectionnez le terme de la location et Inscrire la mensualité"/>
                 <StackPanel Orientation="Horizontal">
@@ -149,7 +268,7 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Label Margin="20,0" Content="Montant du paiement :"/>
-                    <TextBox x:Name="montantPaiement" Width="100" LostFocus="montantPaiement_LostFocus"/>
+                    <TextBox x:Name="montantPaiement" Text="0.00$" Width="100" LostFocus="montantPaiement_LostFocus"/>
                 </StackPanel>
                 <Label Style="{StaticResource styleEntete}" Content="Inscrire la date de contrat et du premier paiement"/>
                 <StackPanel Orientation="Horizontal">
@@ -161,10 +280,22 @@
                 <Separator/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="Annulé" Margin="10,10" Width="150" HorizontalAlignment="Right" Click="Button_Click"/>
-                    <Button Content="Inséré Location" Margin="10,10" Width="150" HorizontalAlignment="Right" Click="insereLocationButton_Click"/>
+                    <Button Content="Inséré Location" x:Name="ButtonInsereLcoation" Margin="10,10" Width="150" HorizontalAlignment="Right" Click="insereLocationButton_Click"/>
                 </StackPanel>
                 <Label Style="{StaticResource styleTitre}" Content="Contrat de location"/>
-                <DataGrid x:Name="lesContratDeLocation" />
+                <DataGrid x:Name="lesContratDeLocation" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Date du contrat" Binding="{Binding DATEDEBUT, StringFormat=\{0:dd MMMM yyyy \}}"/>
+                        <DataGridTextColumn Header="Nom" Binding="{Binding CLIENT.NOM}"/>
+                        <DataGridTextColumn Header="Prénom" Binding="{Binding CLIENT.PRENOM}"/>
+                        <DataGridTextColumn Header="Modèle" Binding="{Binding VEHICULE.MODELE1.MODELE1}"/>
+                        <DataGridTextColumn Header="Année" Binding="{Binding VEHICULE.ANNEE}"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding VEHICULE.TYPE1.TYPE1}"/>
+                        <DataGridTextColumn Header="Couleur" Binding="{Binding VEHICULE.COULEUR1.COULEUR1}"/>
+                        <DataGridTextColumn Header="Numéro d'indentification" Binding="{Binding NIV}"/>
+                        <DataGridTextColumn Header="Montant" Binding="{Binding MONTANT, StringFormat=00.00$}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
                 <Button Content="Modifier contrat" Margin="10,10" Width="150" HorizontalAlignment="Right" Click="ButtonModifierLocation"/>
             </StackPanel>
         </Grid>
