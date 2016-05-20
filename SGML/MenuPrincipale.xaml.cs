@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
-
 
 namespace SGML
 {
     public partial class MenuPrincipale : Window
     {
+        //Gestion de la connexion a la base de donnée... A valider
+        //DataPRIFDataContext context = new DataPRIFDataContext("Data Source = ANDRE-PC; Initial Catalog = ML645-05037; Integrated Security = True");
+        DataPRIFDataContext context = new DataPRIFDataContext("Data Source=ANDRE-LAPTOP; Initial Catalog = ML645-05037; Integrated Security = True");
 
-        DataPRIFDataContext context = new DataPRIFDataContext();
 
         LOCATION selectedLocation = null;
         VEHICULE selectedVehicule = null;
@@ -40,15 +35,25 @@ namespace SGML
         int lIDClient = 0;
         int lKMFin = 0;
         bool lUsage = false;
-
+        bool valkm = false;
         bool typeOperationInsere = true;
 
-        public MenuPrincipale()
+        public MenuPrincipale(string user)
         {
             InitializeComponent();
+            sbUser.Text = user;
 
-            
-        }
+            // Validation connection base de donnée
+            try
+            {
+                var testconnection = from m in context.CLIENTs
+                                     select m;
+            }
+            catch
+            {
+                MessageBox.Show("Erreur de connection a la base de donnée - Fermeture de l'application");
+            }
+                   }
 
         private void aPropos_Click(object sender, RoutedEventArgs e)
         {
@@ -68,6 +73,9 @@ namespace SGML
             GridDashBoard.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Affichage de l'ecran d'entré et modification des location
+        /// </summary>
         private void nouveauLocation_Click(object sender, RoutedEventArgs e)
         {
             hideAllGrids();
@@ -80,20 +88,33 @@ namespace SGML
                                   join v in context.VEHICULEs on l.NIV equals v.NIV
                                   join m in context.MODELEs on v.MODELE equals m.ID
                                   join t in context.TYPEs on v.TYPE equals t.ID
-                                  join c in  context.COULEURs on v.COULEUR equals c.ID
+                                  join c in context.COULEURs on v.COULEUR equals c.ID
                                   select l;
 
             lesContratDeLocation.ItemsSource = sqlListeContrat;
         }
 
+        /// <summary>
+        /// Affichage de l'ecran des gestion des paiement
+        /// </summary>
         private void nouveauPaiment_Click(object sender, RoutedEventArgs e)
         {
             hideAllGrids();
             GridNouveauPaiement.Visibility = Visibility.Visible;
-            PaiementListContrat.ItemsSource = context.LOCATIONs;
-            ListeDesPaiement.CanUserDeleteRows = false;
+            try
+            {
+                PaiementListContrat.ItemsSource = context.LOCATIONs;
+                ListeDesPaiement.CanUserDeleteRows = false;
+            }
+            catch 
+            {
+                MessageBox.Show("Erreur connection a la base de donnée");
+            }
         }
 
+        /// <summary>
+        /// Affichage de l'ecran de gesion d'impression des rapport - État de compte
+        /// </summary>
         private void PrintEtatDeCompte_Click(object sender, RoutedEventArgs e)
         {
             hideAllGrids();
@@ -101,21 +122,15 @@ namespace SGML
             EtatListClient.ItemsSource = context.CLIENTs;
         }
 
+        /// <summary>
+        /// Fonction pour caché les items des écran précedent
+        /// </summary>
         private void hideAllGrids()
         {
             GridNouveauPaiement.Visibility = Visibility.Hidden;
             GridNouvelleLocation.Visibility = Visibility.Hidden;
             GridDashBoard.Visibility = Visibility.Hidden;
             GridEtatCompte.Visibility = Visibility.Hidden;
-
-            
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-
-
-
         }
 
         private List<string> GetAllVehicule()
@@ -134,10 +149,17 @@ namespace SGML
         private ObservableCollection<CLIENT> GetAllClient()
         {
             ObservableCollection<CLIENT> myList = new ObservableCollection<CLIENT>();
-            var getList = context.CLIENTs;
-            foreach (var item in getList)
+            try
             {
-                myList.Add(item);
+                var getList = context.CLIENTs;
+                foreach (var item in getList)
+                {
+                    myList.Add(item);
+                }
+            }
+            catch 
+            {
+                MessageBox.Show("Erreur de connection a la base de donnée");
             }
             return myList;
         }
@@ -146,7 +168,6 @@ namespace SGML
         {
             selectedClient = PaiementListClient.SelectedItem as CLIENT;
         }
-
 
         private void TermesListe_DropDownClosed(object sender, EventArgs e)
         {
@@ -175,7 +196,6 @@ namespace SGML
             bool valterme = false;
             bool valdatedebut = false;
             bool valdatefin = false;
-
 
             if (selectedClient != null)
             {
@@ -250,6 +270,15 @@ namespace SGML
                     finally
                     {
                         reinitlocation();
+
+                        var sqlListeContrat = from l in context.LOCATIONs
+                                              join v in context.VEHICULEs on l.NIV equals v.NIV
+                                              join m in context.MODELEs on v.MODELE equals m.ID
+                                              join t in context.TYPEs on v.TYPE equals t.ID
+                                              join c in context.COULEURs on v.COULEUR equals c.ID
+                                              select l;
+
+                        lesContratDeLocation.ItemsSource = sqlListeContrat;
                     }
                 }
 
@@ -279,6 +308,7 @@ namespace SGML
             {
                 lKMDebut = Convert.ToInt32(ActualKM.Text);
                 ActualKM.Background = Brushes.White;
+                valkm = true;
             }
             catch
             {
@@ -302,68 +332,69 @@ namespace SGML
                     Dispatcher.BeginInvoke(DispatcherPriority.Input,
                        new Action(delegate ()
                        {
-                            ActualKM.Focus();         // Set Logical Focus 
-                            Keyboard.Focus(ActualKM); // Set Keyboard Focus
-                        }));
+                           ActualKM.Focus();         // Set Logical Focus 
+                           Keyboard.Focus(ActualKM); // Set Keyboard Focus
+                       }));
                 }
             }
         }
 
         private void ActualValeur_LostFocus(object sender, RoutedEventArgs e)
         {
-            try
+            if (valkm)
             {
-                lValeur = Convert.ToInt32(ActualValeur.Text);
-                ActualValeur.Background = Brushes.White;
-            }
-            catch
-            {
-                MessageBox.Show("Caractere non valide, veuillez entré un nombre");
-                ActualValeur.Text = String.Format("{0:0.00}$", 0);
-                ActualValeur.Background = Brushes.Orange;
-                Dispatcher.BeginInvoke(DispatcherPriority.Input,
-                    new Action(delegate ()
-                    {
-                        ActualValeur.Focus();         // Set Logical Focus 
-                        Keyboard.Focus(ActualValeur); // Set Keyboard Focus
-                    }));
-            }
-            finally
-            {
-                if (lValeur <= 0)
+                try
                 {
-                    MessageBox.Show("valeur invalid, entre un nombre plus grand que zero");
-                    ActualValeur.Text = String.Format("{0:0.00}$", 0);
+                    lValeur = Convert.ToInt32(ActualValeur.Text);
+                    ActualValeur.Background = Brushes.White;
+                }
+                catch
+                {
+                    MessageBox.Show("Caractere non valide, veuillez entré un nombre");
+                    ActualValeur.Text = "0";
                     ActualValeur.Background = Brushes.Orange;
                     Dispatcher.BeginInvoke(DispatcherPriority.Input,
                         new Action(delegate ()
                         {
-                            ActualValeur.Focus();     // Set Logical Focus 
-                        Keyboard.Focus(ActualValeur); // Set Keyboard Focus
-                    }));
+                            ActualValeur.Focus();         // Set Logical Focus 
+                            Keyboard.Focus(ActualValeur); // Set Keyboard Focus
+                        }));
+                }
+                finally
+                {
+                    if (lValeur <= 0)
+                    {
+                        MessageBox.Show("valeur invalid, entre un nombre plus grand que zero");
+                        ActualValeur.Text = "0";
+                        ActualValeur.Background = Brushes.Orange;
+                        Dispatcher.BeginInvoke(DispatcherPriority.Input,
+                            new Action(delegate ()
+                            {
+                                ActualValeur.Focus();     // Set Logical Focus 
+                                Keyboard.Focus(ActualValeur); // Set Keyboard Focus
+                            }));
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// REinitialisation des variable d'ecran
+        /// </summary>
         private void reinitlocation()
         {
             selectedLocation = null;
             selectedClient = null;
             selectedVehicule = null;
             selectedTerme = null;
-
             SelectedDatePremierPaiement.SelectedDate = null;
             SelectedDateContrat.SelectedDate = null;
-
             PaiementListClient.SelectedIndex = -1;
             PaiementListVehicule.SelectedIndex = -1;
             TermesListe.SelectedIndex = -1;
-
             ActualKM.Text = "0";
-            ActualValeur.Text = String.Format("{0:0.00}$", 0);
-            montantPaiement.Text = String.Format("{0:0.00}$", 0);
-
-
+            ActualValeur.Text = "0";
+            montantPaiement.Text = "0";
             lKMDebut = 0;
             lValeur = 0;
             lMontantPaiement = 0;
@@ -372,11 +403,9 @@ namespace SGML
             lIDClient = 0;
             lKMFin = 0;
             lUsage = false;
-
             ButtonInsereLcoation.Content = "Inséré Location";
             typeOperationInsere = true;
         }
-
 
         private void montantPaiement_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -388,7 +417,7 @@ namespace SGML
             catch
             {
                 MessageBox.Show("Caractere non valide, veuillez entré un nombre");
-                montantPaiement.Text = String.Format("{0:0.00}$", 0);
+                montantPaiement.Text = "0";
                 montantPaiement.Background = Brushes.Orange;
                 Dispatcher.BeginInvoke(DispatcherPriority.Input,
                     new Action(delegate ()
@@ -402,7 +431,7 @@ namespace SGML
                 if (lMontantPaiement <= 0)
                 {
                     MessageBox.Show("valeur invalid, entre un nombre plus grand que zero");
-                    montantPaiement.Text = String.Format("{0:0.00}$", 0);
+                    montantPaiement.Text = "0";
                     montantPaiement.Background = Brushes.Orange;
                     Dispatcher.BeginInvoke(DispatcherPriority.Input,
                         new Action(delegate ()
@@ -436,8 +465,8 @@ namespace SGML
                                                      ", " + selectedLocation.VEHICULE.COULEUR1.COULEUR1;
                 TermesListe.SelectedValue = selectedLocation.TERME1;
                 ActualKM.Text = Convert.ToString(selectedLocation.KM_DEBUT);
-                ActualValeur.Text = String.Format("{0:0.00}$", selectedLocation.VALEUR);
-                montantPaiement.Text = String.Format("{0:0.00}$", selectedLocation.MONTANT); 
+                ActualValeur.Text = String.Format("{0:0.00}", selectedLocation.VALEUR);
+                montantPaiement.Text = String.Format("{0:0.00}", selectedLocation.MONTANT);
                 SelectedDateContrat.Text = selectedLocation.DATEDEBUT.ToString();
                 SelectedDatePremierPaiement.Text = selectedLocation.DATEPAIEMENT.ToString();
             }
@@ -452,11 +481,11 @@ namespace SGML
             selectedLocation = (LOCATION)PaiementListContrat.SelectedItem;
             try
             {
-                paimentMontantDu.Text = String.Format("{0:0.00}$", selectedLocation.MONTANT);
+                paimentMontantDu.Text = String.Format("{0:0.00}", selectedLocation.MONTANT);
             }
             catch
             {
-                paimentMontantDu.Text = "0.00$";
+                paimentMontantDu.Text = "0.00";
             }
 
             try
@@ -467,7 +496,7 @@ namespace SGML
             {
                 ListeDesPaiement.ItemsSource = null;
             }
-    }
+        }
 
         private ObservableCollection<PAIEMENT> GetPaiemmentListe(int idclient, string niv)
         {
@@ -478,10 +507,14 @@ namespace SGML
             return new ObservableCollection<PAIEMENT>(listPaiement);
         }
 
+
+        /// <summary>
+        /// Gestion du edit dans le tabelau / datagrid
+        /// </summary>
         private void dgEmp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
             PAIEMENT myPaiement = e.Row.DataContext as PAIEMENT;
-            
+
             if (isInsertMode && myPaiement != null) // Mode insertion de record
             {
                 var InsertRecord = MessageBox.Show("Voulez vous rajouter un paiement de " + myPaiement.MONTANT + " en date du " + String.Format("{0:dd-MM-yyyy}", myPaiement.DATE) + " ?", "Confirmez", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -519,7 +552,10 @@ namespace SGML
 
         }
 
-      
+        private void changeUser_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            //Load login form .......
+        }
     }
-
 }

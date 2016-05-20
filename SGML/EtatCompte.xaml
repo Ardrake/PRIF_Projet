@@ -34,10 +34,56 @@
             <Label Style="{StaticResource styleItalique}" Content="État de compte"/>
             <DataGrid x:Name="GridListePaiement" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Montant payé" Binding="{Binding MONTANT}"/>
-                    <DataGridTextColumn Header="Paiement fait" Binding="{Binding DATE, StringFormat=\{0:dd MMMM yyyy \}}"/>
+                    <DataGridTextColumn Header="Paiement du"  Width="150"/>
+                    <DataGridTextColumn Header="Montant payé" Width="150" Binding="{Binding MONTANT, StringFormat=00.00$}"/>
+                    <DataGridTextColumn Header="Paiement fait" Width="150" Binding="{Binding DATE, StringFormat=\{0:dd MMMM yyyy \}}"/>
+                    <DataGridTextColumn Header="Enregistré par" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Nombre total de paiements : "/>
+                <TextBlock x:Name="tbNombreTotalPaiement" Margin="5"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Nombre total payé : "/>
+                <TextBlock x:Name="tbNombreTotalPaye" Margin="5"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Nombre total en souffrance : "/>
+                <TextBlock x:Name="tbNombreTotalSouffrance" Margin="5"/>
+            </StackPanel>
+            <Label Content=""/>
+            <Border Margin="10" BorderThickness="1"  BorderBrush="Black">
+                <StackPanel Orientation="Vertical">
+                    <Label Style="{StaticResource styleBold}" Content="COLLECTION POUR NOEL KETCHUM"/>
+                    <Label Content=""/>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Content="Collection total :" />
+                        <TextBlock x:Name="tbCollectionTotal" Text="0.00$" Margin="475,5" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <Label Content=""/>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Content="Collection total en souffrance :" />
+                        <TextBlock x:Name="tbCollectionTotalsoufrance" Text="0.00$" Margin="400,5" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Label Content=""/>
+            <Border Margin="10" BorderThickness="1"  BorderBrush="Black" >
+                <StackPanel Orientation="Vertical">
+                    <Label Style="{StaticResource styleBold}" Content="TOTAL DES COLLECTION POUR LA PÉRIODE"/>
+                    <Label Content=""/>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Content="Collection total :" />
+                        <TextBlock x:Name="tbCollectionTotalPreiode" Text="0.00$" Margin="475,5" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <Label Content=""/>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Content="Collection total en souffrance :" />
+                        <TextBlock x:Name="tbCollectionTotalsoufrancePeriode" Text="0.00$" Margin="400,5" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 using System.Text.RegularExpressions;
+
 
 namespace SGML
 {
@@ -22,7 +13,8 @@ namespace SGML
     {
         public EtatCompte(CLIENT etatClient)
         {
-            DataPRIFDataContext context = new DataPRIFDataContext();
+            //DataPRIFDataContext context = new DataPRIFDataContext("Data Source = ANDRE-PC; Initial Catalog = ML645-05037; Integrated Security = True");
+            DataPRIFDataContext context = new DataPRIFDataContext("Data Source=ANDRE-LAPTOP; Initial Catalog = ML645-05037; Integrated Security = True");
 
             InitializeComponent();
 
@@ -36,15 +28,13 @@ namespace SGML
                                        where l.CLIENT.IDCLIENT == etatClient.IDCLIENT
                                        select l;
 
-                
-
                 if (sqlListeLocation.Count() == 0)
                 {
                     MessageBox.Show("Aucune vehicule loué");
                 }
-                if (sqlListeLocation.Count() == 1)
+                if (sqlListeLocation.Count() >= 1)
                 {
-                    MessageBox.Show("un vehicule loué");
+                    //MessageBox.Show("un vehicule loué ou pluesieur ");
                     LOCATION myLocation = sqlListeLocation.First();
 
                     tbVehicule.Text = myLocation.VEHICULE.MODELE1.MODELE1 + " " + myLocation.VEHICULE.ANNEE + ", NIV : " 
@@ -56,22 +46,14 @@ namespace SGML
 
                     GridListePaiement.ItemsSource = sqlListePaiement;
 
+                    tbNombreTotalPaiement.Text = sqlListePaiement.Count().ToString();
+                    tbNombreTotalPaye.Text = string.Format("{0:0.00}$", sqlListePaiement.Sum(item => item.MONTANT));
                 }
-                else
-                {
-                    MessageBox.Show("Gestion rapport multi vehicule");
-                }
-                
-
-
-
             }
             else
             {
                 MessageBox.Show("Erreur client");
             }
-
-
         }
 
         public string FormattedPhoneNumber(string tel)

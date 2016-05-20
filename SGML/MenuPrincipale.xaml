@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SGML"
         mc:Ignorable="d"
-        Title="SGML - Menu principale" Height="749.457" Width="900" Loaded="Window_Loaded">
+        Title="SGML - Menu principale" Height="749.457" Width="900">
 
     <Window.Resources>
         
@@ -37,17 +37,22 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="15" />
         </Grid.ColumnDefinitions>
         <DockPanel Grid.ColumnSpan="3" Height="100" HorizontalAlignment="Stretch" Margin="0" Name="dockPanel1" VerticalAlignment="Top" Width="Auto">
             <Menu Style="{StaticResource stylePolice}" Height="23" Name="menu1" Width="Auto" DockPanel.Dock="Top" VerticalAlignment="Top">
                 <MenuItem Header="_Fichier">
                     <MenuItem Header="Connection Base de données" Name="nouveauConnection" IsEnabled="False" >
+                        <MenuItem.Icon>
+                            <Image Source="client.png" Stretch="Fill" Height="16" Width="16"  />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Changé d'_utilisateur" Name="changeUser" IsEnabled="False" Click="changeUser_Click">
                         <MenuItem.Icon>
                             <Image Source="client.png" Stretch="Fill" Height="16" Width="16"  />
                         </MenuItem.Icon>
@@ -98,13 +103,24 @@
         </DockPanel>
 
         <Grid x:Name="GridDashBoard" Grid.Column="1" Grid.Row="1" Visibility="Visible">
-            <Label Content="Dashboard"/>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="100" />
                 </Grid.ColumnDefinitions>
             </Grid>
+            <StackPanel Orientation="Vertical">
+                <Label Style="{StaticResource styleTitre}" Content="Tableau de bord"/>
+                <Label Style="{StaticResource styleEntete}" Content="Système de Gestion Multi-Location (SGML)"/>
+                <Label Content="par André Cooke"/>
+                <Label Content="645-050537"/>
+                <Label Content=""/>
+                <Label Style="{StaticResource styleEntete}" Content="PRIF"/>
+                <Label Content="Projet d'intégration final - Traitement de données"/>
+                <Label Content="Date début : 5 Mai 2016"/>
+                <Label Content="Date fin : 20 Mai 2016"/>
+                <Label Content="Francois Dion"/>
+            </StackPanel>
         </Grid>
 
         <Grid x:Name="GridEtatCompte" Grid.Column="1" Grid.Row="1" Visibility="Collapsed">
@@ -134,7 +150,6 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-
 
         <Grid x:Name="GridNouveauPaiement" Grid.Column="1" Grid.Row="1" Visibility="Collapsed">
             <StackPanel Orientation="Vertical">
@@ -172,7 +187,10 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 
                 </StackPanel>
-                <Label Style="{StaticResource styleTitre}" Content="Liste des paiements"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Style="{StaticResource styleTitre}" Content="Liste des paiements"/>
+                    <Label Margin="50,10" Content="Inserez ou modfiez les paiements directement dans la liste si-dessous"/>
+                </StackPanel>
                 <DataGrid x:Name="ListeDesPaiement" ItemsSource="{Binding}" AutoGenerateColumns="False" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                           RowEditEnding="dgEmp_RowEditEnding" AddingNewItem="dgEmp_AddingNewItem" BeginningEdit="dgEmp_BeginningEdit">
                     <DataGrid.Columns>
@@ -184,7 +202,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
-                                    <DatePicker SelectedDate ="{Binding DATE, StringFormat=00.00$, NotifyOnSourceUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <DatePicker SelectedDate ="{Binding DATE, StringFormat=\{0:d\}, NotifyOnSourceUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
@@ -192,7 +210,7 @@
                         <DataGridTemplateColumn x:Name="leMontant" Header="Montant payé" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Path=MONTANT, StringFormat=00.00$}" />
+                                    <TextBlock Text="{Binding Path=MONTANT, StringFormat=00.00}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
 
@@ -218,10 +236,6 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                
-                
-                
-
             </StackPanel>
         </Grid>
 
@@ -251,7 +265,7 @@
                     <Label Content="Kilometrage actuel: "/>
                     <TextBox x:Name="ActualKM" Width="100" LostFocus="ActualKM_LostFocus" Text="0"/>
                     <Label Content="Valeur actuel $ : "/>
-                    <TextBox x:Name="ActualValeur" Width="100" LostFocus="ActualValeur_LostFocus" Text="0.00$"/>
+                    <TextBox x:Name="ActualValeur" Width="100" LostFocus="ActualValeur_LostFocus" Text="0.00"/>
                 </StackPanel>
                 <Label Style="{StaticResource styleEntete}" Content="Selectionnez le terme de la location et Inscrire la mensualité"/>
                 <StackPanel Orientation="Horizontal">
@@ -268,7 +282,7 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Label Margin="20,0" Content="Montant du paiement :"/>
-                    <TextBox x:Name="montantPaiement" Text="0.00$" Width="100" LostFocus="montantPaiement_LostFocus"/>
+                    <TextBox x:Name="montantPaiement" Text="0.00" Width="100" LostFocus="montantPaiement_LostFocus"/>
                 </StackPanel>
                 <Label Style="{StaticResource styleEntete}" Content="Inscrire la date de contrat et du premier paiement"/>
                 <StackPanel Orientation="Horizontal">
@@ -293,11 +307,16 @@
                         <DataGridTextColumn Header="Type" Binding="{Binding VEHICULE.TYPE1.TYPE1}"/>
                         <DataGridTextColumn Header="Couleur" Binding="{Binding VEHICULE.COULEUR1.COULEUR1}"/>
                         <DataGridTextColumn Header="Numéro d'indentification" Binding="{Binding NIV}"/>
-                        <DataGridTextColumn Header="Montant" Binding="{Binding MONTANT, StringFormat=00.00$}"/>
+                        <DataGridTextColumn Header="Montant" Binding="{Binding MONTANT, StringFormat=00.00}"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Button Content="Modifier contrat" Margin="10,10" Width="150" HorizontalAlignment="Right" Click="ButtonModifierLocation"/>
             </StackPanel>
         </Grid>
+        <StatusBar Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="32">
+            <Label Margin="5,0" Content="Usager : "/>
+            <TextBlock Margin="1,5" x:Name="sbUser" Text="user"/>
+        </StatusBar>
+
     </Grid>
 </Window>
